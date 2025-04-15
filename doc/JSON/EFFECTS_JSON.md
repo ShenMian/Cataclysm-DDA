@@ -620,7 +620,7 @@ value. If there is only one value given it will always use that amount.
 Base mods and Scaling mods:
 While on intensity = 1 an effect will only have the basic effects of its "base_mods". However for each
 additional intensity it gains it adds the value of each of its "scaling_mods" to the calculations. So:
-```cpp
+```txt
 Intensity 1 values = base_mods values
 Intensity 2 values = base_mods values + scaling_mods values
 Intensity 3 values = base_mods values + 2 * scaling_mods values
@@ -670,7 +670,7 @@ As it moves up through the different intensities, its name will change. Its desc
 changes, with no additional description added.
 
 As it moves up through the intensity levels its effects will be:
-```cpp
+```txt
 Intensity 1
     +1 STR
     No other effects (since both "X_chance"s are negative)
