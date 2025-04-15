@@ -82,7 +82,7 @@ Note that **all new traits that can be obtained through mutation must be purifia
 
 ### Example
 
-```json
+```jsonc
 {
   "id": "LIGHTEATER",                         // Unique ID.
   "name": "Optimist",                         // In-game name displayed.
@@ -269,46 +269,46 @@ Note that **all new traits that can be obtained through mutation must be purifia
 
 These fields are mandatory for every mutation object, and the game will fail to load if any of them are missing for a given trait.
 
-|    Identifier     |                                                   Description                                                     |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `type`            | Must be `"mutation"`.                                                                                             |
-| `id`              | ID string. Mutations can't have the same ID: every one must be unique.                                            |
-| `name`            | The name for the mutation as it appears in the character sheet.                                                   |
-| `description`     | A human-readable description for the mutation.                                                                    |
-| `points`          | The point cost of this trait.  Positive values cost points, while negative values add them.  0 is a valid option. |
+| Identifier    | Description                                                                                                       |
+|---------------|-------------------------------------------------------------------------------------------------------------------|
+| `type`        | Must be `"mutation"`.                                                                                             |
+| `id`          | ID string. Mutations can't have the same ID: every one must be unique.                                            |
+| `name`        | The name for the mutation as it appears in the character sheet.                                                   |
+| `description` | A human-readable description for the mutation.                                                                    |
+| `points`      | The point cost of this trait.  Positive values cost points, while negative values add them.  0 is a valid option. |
 
 ### Supplementary Fields
 
 These fields are optional, but are very frequently used in mutations and their code, so they're highlighted here first.
 
-|    Identifier     | Default |                                                                          Description                                                                        |
-| ----------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `category`        | Nothing | An array of string IDs representing mutation categories. This defines which categories the trait is considered part of (such as `ALPHA`, `BEAST`, `CEPHALOPOD`, and so on) and so it determines which primers must be used for the player to mutate them. |
-| `types`           | Nothing | A list of types that this mutation can be classified under. Each mutation with a certain type is mutually exclusive with other mutations that also have that type; if a trait has the `EXAMPLE` type defined, then no other trait with that type can exist on a character, and mutating towards such a trait would remove the existing one if it could.  An exception is made for same-typed prerequisite traits, these will not get removed.|
-| `prereqs`         | Nothing | An array of mutation IDs that are possible requirements for this trait to be obtained. Only a single option from this list needs to be present.             |
-| `prereqs2`        | Nothing | Identical to `prereqs`, and will throw errors if `prereqs` isn't defined. This is used to have multiple traits required to obtain another trait; one option must be present on the character from both `prereqs` and `prereqs2` for a trait to be obtainable. |
-| `threshreq`       | Nothing | This is a dedicated prerequisite slot for threshold mutations, and functions identically to `prereq` and `prereq2`.                                         |
-| `cancels`         | Nothing | Trait IDs defined in this array will be forcibly removed from the character when trait is mutated.                                                          |
-| `changes_to`      | Nothing | Used for defining mutation lines with defined steps. This trait can further mutate into any other trait defined in this list.                               |
-| `leads_to`        | Nothing | Mutations that add onto this one without removing it. Effectively a reverse of the `prereqs` tag.  Also prevents type conflicts with this trait!            |
-| `starting_trait`  | false   | If true, this trait can be selected during character creation.                                                                                              |
-| `valid`           | true    | Whether or not this trait can be obtained through mutation. Invalid traits are still obtainable while creating a character.                                 |
-| `purifiable`      | true    | Whether or not this trait can be removed. If false, the trait cannot be removed by any means.                                                               |
-| `player_display`  | true    | If false, this trait is invisible, and will not appear in messages or the character sheet.                                                                  |
-| `mixed_effect`    | false   | Whether this trait has both positive and negative effects. Used only for UI; mixed mutations will appear with purple text instead of green, yellow, or red (which is usually automatically determined by point cost). |
-| `vanity`          | false   | This trait is purely cosmetic, and can be changed at any time. This is for things like skin color, eye color, hair color, etc.                              |
-| `debug`           | false   | Identifies this trait as a debug trait that should never be obtainable in normal play. Debug traits will have a distinct teal color on the character sheet. |
-| `visibility`      | 0       | How visible this mutation is on NPCs when inspecting them, ranging between 0 and 10. Higher numbers are more visible, and can be seen from farther with a lower Perception score. |
-| `ugliness`        | 0       | How unpleasant this mutation is to look at. Ugly mutations increase NPC fear and decrease their trust. Negative values are allowed, and will do the opposite by making NPCs more trusting and less afraid. |
-| `active`          | false   | Active traits have special effects that only occur when the trait is manually or automatically activated; they don't happen on their own.                   |
-| `starts_active`   | false   | If true, a trait will start activated, instead of deactivated. Will throw an error if `active` is not defined.                                              |
-| `time`            | 0       | The time interval (measured in turns) between an active mutation requiring its cost again. This can be used to create active mutations that continually drain resources while active. If 0 or below, the cost is a one-time requirement instead. |
-| `cost`            | 0       | For active mutations, this value is the cost to activate them. At least one of the following three values will need to be `true` for this to function.      |
-| `kcal`            | false   | If true, this active mutation will consume `cost` kcal during activation or upkeep.                                                                         |
-| `thirst`          | false   | If true, this active mutation will consume `cost` thirst during activation or upkeep.                                                                       |
-| `sleepiness`      | false   | If true, this active mutation will consume `cost` sleepiness during activation or upkeep.                                                                   |
-| `mana`            | false   | If true, this active mutation will consume `cost` mana during activation or upkeep. Can used by magic mods.                                                 |
-| `enchantments`    | Nothing | A list of enchantments granted by this mutation. Can either be string IDs of a defined enchantment, or an inline definition.                                |
+| Identifier       | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `category`       | Nothing | An array of string IDs representing mutation categories. This defines which categories the trait is considered part of (such as `ALPHA`, `BEAST`, `CEPHALOPOD`, and so on) and so it determines which primers must be used for the player to mutate them.                                                                                                                                                                                     |
+| `types`          | Nothing | A list of types that this mutation can be classified under. Each mutation with a certain type is mutually exclusive with other mutations that also have that type; if a trait has the `EXAMPLE` type defined, then no other trait with that type can exist on a character, and mutating towards such a trait would remove the existing one if it could.  An exception is made for same-typed prerequisite traits, these will not get removed. |
+| `prereqs`        | Nothing | An array of mutation IDs that are possible requirements for this trait to be obtained. Only a single option from this list needs to be present.                                                                                                                                                                                                                                                                                               |
+| `prereqs2`       | Nothing | Identical to `prereqs`, and will throw errors if `prereqs` isn't defined. This is used to have multiple traits required to obtain another trait; one option must be present on the character from both `prereqs` and `prereqs2` for a trait to be obtainable.                                                                                                                                                                                 |
+| `threshreq`      | Nothing | This is a dedicated prerequisite slot for threshold mutations, and functions identically to `prereq` and `prereq2`.                                                                                                                                                                                                                                                                                                                           |
+| `cancels`        | Nothing | Trait IDs defined in this array will be forcibly removed from the character when trait is mutated.                                                                                                                                                                                                                                                                                                                                            |
+| `changes_to`     | Nothing | Used for defining mutation lines with defined steps. This trait can further mutate into any other trait defined in this list.                                                                                                                                                                                                                                                                                                                 |
+| `leads_to`       | Nothing | Mutations that add onto this one without removing it. Effectively a reverse of the `prereqs` tag.  Also prevents type conflicts with this trait!                                                                                                                                                                                                                                                                                              |
+| `starting_trait` | false   | If true, this trait can be selected during character creation.                                                                                                                                                                                                                                                                                                                                                                                |
+| `valid`          | true    | Whether or not this trait can be obtained through mutation. Invalid traits are still obtainable while creating a character.                                                                                                                                                                                                                                                                                                                   |
+| `purifiable`     | true    | Whether or not this trait can be removed. If false, the trait cannot be removed by any means.                                                                                                                                                                                                                                                                                                                                                 |
+| `player_display` | true    | If false, this trait is invisible, and will not appear in messages or the character sheet.                                                                                                                                                                                                                                                                                                                                                    |
+| `mixed_effect`   | false   | Whether this trait has both positive and negative effects. Used only for UI; mixed mutations will appear with purple text instead of green, yellow, or red (which is usually automatically determined by point cost).                                                                                                                                                                                                                         |
+| `vanity`         | false   | This trait is purely cosmetic, and can be changed at any time. This is for things like skin color, eye color, hair color, etc.                                                                                                                                                                                                                                                                                                                |
+| `debug`          | false   | Identifies this trait as a debug trait that should never be obtainable in normal play. Debug traits will have a distinct teal color on the character sheet.                                                                                                                                                                                                                                                                                   |
+| `visibility`     | 0       | How visible this mutation is on NPCs when inspecting them, ranging between 0 and 10. Higher numbers are more visible, and can be seen from farther with a lower Perception score.                                                                                                                                                                                                                                                             |
+| `ugliness`       | 0       | How unpleasant this mutation is to look at. Ugly mutations increase NPC fear and decrease their trust. Negative values are allowed, and will do the opposite by making NPCs more trusting and less afraid.                                                                                                                                                                                                                                    |
+| `active`         | false   | Active traits have special effects that only occur when the trait is manually or automatically activated; they don't happen on their own.                                                                                                                                                                                                                                                                                                     |
+| `starts_active`  | false   | If true, a trait will start activated, instead of deactivated. Will throw an error if `active` is not defined.                                                                                                                                                                                                                                                                                                                                |
+| `time`           | 0       | The time interval (measured in turns) between an active mutation requiring its cost again. This can be used to create active mutations that continually drain resources while active. If 0 or below, the cost is a one-time requirement instead.                                                                                                                                                                                              |
+| `cost`           | 0       | For active mutations, this value is the cost to activate them. At least one of the following three values will need to be `true` for this to function.                                                                                                                                                                                                                                                                                        |
+| `kcal`           | false   | If true, this active mutation will consume `cost` kcal during activation or upkeep.                                                                                                                                                                                                                                                                                                                                                           |
+| `thirst`         | false   | If true, this active mutation will consume `cost` thirst during activation or upkeep.                                                                                                                                                                                                                                                                                                                                                         |
+| `sleepiness`     | false   | If true, this active mutation will consume `cost` sleepiness during activation or upkeep.                                                                                                                                                                                                                                                                                                                                                     |
+| `mana`           | false   | If true, this active mutation will consume `cost` mana during activation or upkeep. Can used by magic mods.                                                                                                                                                                                                                                                                                                                                   |
+| `enchantments`   | Nothing | A list of enchantments granted by this mutation. Can either be string IDs of a defined enchantment, or an inline definition.                                                                                                                                                                                                                                                                                                                  |
 
 ### Optional Fields
 
@@ -322,29 +322,29 @@ Comfort data can have one or more `conditions`. Comfort data passes (is true) wh
 
 Conditions have the following fields. `type` is mandatory and determines which other fields are mandatory. `invert` is always optional.
 
-| Identifier  | Type    | Description
-|-------------|---------|-------------
-| `type`      | string  | One of `"terrain"`, `"furniture"`, `"trap"`, `"field"`, `"vehicle"`, `"character"`, or `"trait"`. Always mandatory.
-| `id`        | string  | The ID of a terrain, furniture, trap, field, or trait.
-| `flag`      | string  | A terrain, furniture, vehicle part, or character flag.
-| `intensity` | integer | A field's intensity.
-| `active`    | boolean | If a trait must be active.
-| `invert`    | boolean | If a condition should pass when it would fail and fail when it would pass. Always optional.
+| Identifier  | Type    | Description                                                                                                         |
+|-------------|---------|---------------------------------------------------------------------------------------------------------------------|
+| `type`      | string  | One of `"terrain"`, `"furniture"`, `"trap"`, `"field"`, `"vehicle"`, `"character"`, or `"trait"`. Always mandatory. |
+| `id`        | string  | The ID of a terrain, furniture, trap, field, or trait.                                                              |
+| `flag`      | string  | A terrain, furniture, vehicle part, or character flag.                                                              |
+| `intensity` | integer | A field's intensity.                                                                                                |
+| `active`    | boolean | If a trait must be active.                                                                                          |
+| `invert`    | boolean | If a condition should pass when it would fail and fail when it would pass. Always optional.                         |
 
 #### Types
 
 A condition's `type` determines what it checks for in a location. A condition passes (is true) according to it's `type`.
 
-| Type        | Mandatory      | Optional    | Passes
-|-------------|----------------|-------------|-------------
-| `terrain`   | `id` or `flag` |             | Passes if on terrain with the given `id` or `flag`.
-| `furniture` | `id` or `flag` |             | Passes if on furniture with the given `id` or `flag`.
-| `trap`      | `id`           |             | Passes if on a trap with the given `id`.
-| `field`     | `id`           | `intensity` | Passes if in a field with the given `id`. If `intensity` is defined, the field's intensity must be greater than or equal to `intensity`.
-| `vehicle`   |                | `flag`      | Passes if in/on a part of a vehicle. If `flag` is defined, the part must have the given `flag` and cannot be broken.
-| `character` | `flag`         |             | Passes if the character has the given `flag`.
-| `trait`     | `id`           | `active`    | Passes if the character has a trait with the given `id`. If `active` is defined, the trait must be active.
-| all types   |                | `invert`    | Passes if the condition would fail. Fails if the condition would pass.
+| Type        | Mandatory      | Optional    | Passes                                                                                                                                   |
+|-------------|----------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `terrain`   | `id` or `flag` |             | Passes if on terrain with the given `id` or `flag`.                                                                                      |
+| `furniture` | `id` or `flag` |             | Passes if on furniture with the given `id` or `flag`.                                                                                    |
+| `trap`      | `id`           |             | Passes if on a trap with the given `id`.                                                                                                 |
+| `field`     | `id`           | `intensity` | Passes if in a field with the given `id`. If `intensity` is defined, the field's intensity must be greater than or equal to `intensity`. |
+| `vehicle`   |                | `flag`      | Passes if in/on a part of a vehicle. If `flag` is defined, the part must have the given `flag` and cannot be broken.                     |
+| `character` | `flag`         |             | Passes if the character has the given `flag`.                                                                                            |
+| `trait`     | `id`           | `active`    | Passes if the character has a trait with the given `id`. If `active` is defined, the trait must be active.                               |
+| all types   |                | `invert`    | Passes if the condition would fail. Fails if the condition would pass.                                                                   |
 
 ### EOC details
 
@@ -352,7 +352,7 @@ Mutations support EOC on activate, deactivate and for processing. As well for ea
 
 ### Sample trait: Example Sleep
 
-```json
+```jsonc
   {
     "type": "mutation",
     "id": "EXAMPLE_SLEEP",
@@ -370,25 +370,25 @@ Mutations support EOC on activate, deactivate and for processing. As well for ea
 
 A Mutation Category identifies a set of interrelated mutations that as a whole establish an entirely new identity for a mutant character. Categories can and usually do have their own "flavor" of mutagen, the properties of which are defined in the category definition itself. A second kind of mutagen, called a "mutagen serum" or "IV mutagen" is necessary to trigger "threshold mutations" which cause irrevocable changes to the character.
 
-| Identifier              | Description
-|---                      |---
-| `id`                    | Unique ID. Must be one continuous word, use underscores when necessary.
-| `name`                  | Human readable name for the category of mutations.
-| `threshold_mut`         | A special mutation that marks the point at which the identity of the character is changed by the extent of mutation they have experienced.
-| `threshold_min`         | Amount of primer the character needs to have in their body to attempt breaking the threshold.  Default 2200.
-| `mutagen_message`       | A message displayed to the player when they mutate in this category.
-| `memorial_message`      | The memorial message to display when a character crosses the associated mutation threshold.
-| `vitamin`               | The vitamin id of the primer of this category. The character's vitamin level will act as the weight of this category when selecting which category to try and mutate towards, and gets decreased on successful mutation by the trait's mutagen cost.
-| `base_removal_chance`   | Int, percent chance for a mutation of this category removing a conflicting base (starting) trait, rolled per `Character::mutate_towards` attempts.  Default 100%.  Removed base traits will **NOT** be considered base traits from here on, even if you regain them later.
-| `base_removal_cost_mul` | Float, multiplier on the primer cost of the trait that removed a canceled starting trait, down to 0.0 for free mutations as long as a starting trait was given up.  Default 3.0, used for human-like categories and lower as categories become more inhuman.
-| `wip`                   | A flag indicating that a mutation category is unfinished and shouldn't have consistency tests run on it. See tests/mutation_test.cpp.
-| `skip_test`             | If true, this mutation category will be skipped in consistency tests; this should only be used if you know what you're doing. See tests/mutation_test.cpp.
+| Identifier              | Description                                                                                                                                                                                                                                                                |
+|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                    | Unique ID. Must be one continuous word, use underscores when necessary.                                                                                                                                                                                                    |
+| `name`                  | Human readable name for the category of mutations.                                                                                                                                                                                                                         |
+| `threshold_mut`         | A special mutation that marks the point at which the identity of the character is changed by the extent of mutation they have experienced.                                                                                                                                 |
+| `threshold_min`         | Amount of primer the character needs to have in their body to attempt breaking the threshold.  Default 2200.                                                                                                                                                               |
+| `mutagen_message`       | A message displayed to the player when they mutate in this category.                                                                                                                                                                                                       |
+| `memorial_message`      | The memorial message to display when a character crosses the associated mutation threshold.                                                                                                                                                                                |
+| `vitamin`               | The vitamin id of the primer of this category. The character's vitamin level will act as the weight of this category when selecting which category to try and mutate towards, and gets decreased on successful mutation by the trait's mutagen cost.                       |
+| `base_removal_chance`   | Int, percent chance for a mutation of this category removing a conflicting base (starting) trait, rolled per `Character::mutate_towards` attempts.  Default 100%.  Removed base traits will **NOT** be considered base traits from here on, even if you regain them later. |
+| `base_removal_cost_mul` | Float, multiplier on the primer cost of the trait that removed a canceled starting trait, down to 0.0 for free mutations as long as a starting trait was given up.  Default 3.0, used for human-like categories and lower as categories become more inhuman.               |
+| `wip`                   | A flag indicating that a mutation category is unfinished and shouldn't have consistency tests run on it. See tests/mutation_test.cpp.                                                                                                                                      |
+| `skip_test`             | If true, this mutation category will be skipped in consistency tests; this should only be used if you know what you're doing. See tests/mutation_test.cpp.                                                                                                                 |
 
 ## Trait Migrations
 
 A mutation migration can be used to migrate a mutation that formerly existed gracefully into a proficiency, another mutation (potentially a specific variant), or to simply remove it without any fuss.
 
-```json
+```jsonc
 [
   {
     "type": "TRAIT_MIGRATION",
@@ -409,13 +409,13 @@ A mutation migration can be used to migrate a mutation that formerly existed gra
 ]
 ```
 
-| Identifier    | Description
-|---            |---
-| `type`        | Mandatory. String. Must be `"TRAIT_MIGRATION"`
-| `id`          | Mandatory. String. Id of the trait that has been removed.
-| `trait`       | Optional\*. String. Id of the trait this trait is being migrated to.
-| `variant`     | Optional. String. Can only be specified if `trait` is specified. Id of a variant of `trait` that this mutation will be set to.
-| `proficiency` | Optional\*. String. Id of proficiency that will replace this trait.
-| `remove`      | Optional\*. Boolean. If neither `trait` or `variant` are specified, this must be true.
+| Identifier    | Description                                                                                                                    |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------|
+| `type`        | Mandatory. String. Must be `"TRAIT_MIGRATION"`                                                                                 |
+| `id`          | Mandatory. String. Id of the trait that has been removed.                                                                      |
+| `trait`       | Optional\*. String. Id of the trait this trait is being migrated to.                                                           |
+| `variant`     | Optional. String. Can only be specified if `trait` is specified. Id of a variant of `trait` that this mutation will be set to. |
+| `proficiency` | Optional\*. String. Id of proficiency that will replace this trait.                                                            |
+| `remove`      | Optional\*. Boolean. If neither `trait` or `variant` are specified, this must be true.                                         |
 
 \*One of these three must be specified.

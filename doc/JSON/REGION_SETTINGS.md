@@ -4,8 +4,8 @@ The **region_settings** define the attributes for map generation that apply to a
 The general settings define the default overmap terrain and ground cover. Additional sections are
 as follows:
 
-|             Section             |                              Description                              |
-| ------------------------------- | --------------------------------------------------------------------- |
+| Section                         | Description                                                           |
+|---------------------------------|-----------------------------------------------------------------------|
 | `region_terrain_and_furniture`  | Defines the resolution of regional terrain/furniture to actual types. |
 | `field_coverage`                | Defines the flora that cover the `field` overmap terrain.             |
 | `overmap_lake_settings`         | Defines parameters for generating lakes in the region.                |
@@ -21,16 +21,16 @@ Note that for the default region, all attributes and sections are required.
 
 ### Fields
 
-|       Identifier        |                            Description                             |
-| ----------------------- | ------------------------------------------------------------------ |
-| `type`                  | Type identifier. Must be "region_settings".                        |
-| `id`                    | Unique identifier for this region.                                 |
-| `default_oter`          | Default overmap terrain for this region.                           |
-| `default_groundcover`   | List of terrain types and weights applied as default ground cover. |
+| Identifier            | Description                                                        |
+|-----------------------|--------------------------------------------------------------------|
+| `type`                | Type identifier. Must be "region_settings".                        |
+| `id`                  | Unique identifier for this region.                                 |
+| `default_oter`        | Default overmap terrain for this region.                           |
+| `default_groundcover` | List of terrain types and weights applied as default ground cover. |
 
 
 ### Example
-```json
+```jsonc
 {
 	"type": "region_settings",
 	"id": "default",
@@ -51,13 +51,13 @@ regional entry to an actual entry.
 
 ### Fields
 
-| Identifier  |                            Description                             |
-| ----------- | ------------------------------------------------------------------ |
+| Identifier  | Description                                                        |
+|-------------|--------------------------------------------------------------------|
 | `terrain`   | List of regional terrain and their corresponding weighted lists.   |
 | `furniture` | List of regional furniture and their corresponding weighted lists. |
 
 ### Example
-```json
+```jsonc
 {
 	"region_terrain_and_furniture": {
 		"terrain": {
@@ -92,8 +92,8 @@ cover the `field` overmap terrain.
 
 ### Fields
 
-|         Identifier         |                                 Description                                  |
-| -------------------------- | ---------------------------------------------------------------------------- |
+| Identifier                 | Description                                                                  |
+|----------------------------|------------------------------------------------------------------------------|
 | `percent_coverage`         | % of tiles in the overmap terrain that have a plant.                         |
 | `default_ter`              | Default terrain feature for plants.                                          |
 | `other`                    | List of features with % chance when `default_ter` isn't used.                |
@@ -103,7 +103,7 @@ cover the `field` overmap terrain.
 | `boosted_other_percent`    | % of `boosted_percent_coverage` that will be covered by `boosted_other`.     |
 
 ### Example
-```json
+```jsonc
 {
 	"field_coverage": {
 		"percent_coverage": 0.9333,
@@ -133,8 +133,8 @@ are interpreted.
 
 ### Fields
 
-|                 Identifier                 |                                 Description                                 |
-| ------------------------------------------ | --------------------------------------------------------------------------- |
+| Identifier                                 | Description                                                                 |
+|--------------------------------------------|-----------------------------------------------------------------------------|
 | `noise_threshold_lake`                     | [0, 1], x > value spawns a `lake_surface` or `lake_shore`.                  |
 | `lake_size_min`                            | Minimum size of the lake in overmap terrains for it to actually spawn.      |
 | `lake_depth`                               | Depth of lakes, expressed in Z-levels (e.g. -1 to -10).                     |
@@ -143,7 +143,7 @@ are interpreted.
 
 ### Example
 
-```json
+```jsonc
 {
 	"overmap_lake_settings": {
 		"noise_threshold_lake": 0.25,
@@ -166,8 +166,8 @@ features are interpreted.
 
 ### Fields
 
-|               Identifier               |                              Description                               |
-| -------------------------------------- | ---------------------------------------------------------------------- |
+| Identifier                             | Description                                                            |
+|----------------------------------------|------------------------------------------------------------------------|
 | `noise_threshold_forest`               | [0, 1], x > value spawns `forest`.                                     |
 | `noise_threshold_forest_thick`         | [0, 1], x > value spawns `forest_thick`.                               |
 | `noise_threshold_swamp_adjacent_water` | [0, 1], x > value spawns `forest_water` if forest near a waterbody.    |
@@ -177,7 +177,7 @@ features are interpreted.
 
 ### Example
 
-```json
+```jsonc
 {
 	"overmap_forest_settings": {
 		"noise_threshold_forest": 0.25,
@@ -203,7 +203,7 @@ At the top level, the `forest_mapgen_settings` is a collection of named configur
 that are not rendered by the forest mapgen, but will be used when blending forest terrains with
 other terrain types.
 
-```json
+```jsonc
 {
 	"forest_mapgen_settings": {
 		"forest": {},
@@ -217,23 +217,23 @@ Each terrain then has an independent set of configuration values that control th
 
 ### Fields
 
-|          Identifier           |                                 Description                                  |
-| ----------------------------- | ---------------------------------------------------------------------------- |
-| `terrains`                    | The overmap terrain IDs which have this biome.                               |
-| `sparseness_adjacency_factor` | Value relative to neighbors controls how dense the overmap terrain will be.  |
-| `item_group`                  | Item group used to place items randomly within the overmap terrain.          |
-| `item_group_chance`           | % chance, between 1 and 100, that an item will be placed.                    |
-| `item_spawn_iterations`       | Number of times that the item spawning will be called.                       |
-| `clear_groundcover`           | Clear all previously defined `groundcover` for this overmap terrain.         |
-| `groundcover`                 | Weighted list of terrains used for base groundcover.                         |
-| `clear_components`            | Clear all previously defined `components` for this overmap terrain.          |
-| `components`                  | Collection of components that make up the terrains and furniture placed.     |
-| `clear_terrain_furniture`     | Clear all previously defined `terrain_furniture` for this overmap terrain.   |
-| `terrain_furniture`           | Collection of furniture conditionally placed based on terrain.               |
+| Identifier                    | Description                                                                 |
+|-------------------------------|-----------------------------------------------------------------------------|
+| `terrains`                    | The overmap terrain IDs which have this biome.                              |
+| `sparseness_adjacency_factor` | Value relative to neighbors controls how dense the overmap terrain will be. |
+| `item_group`                  | Item group used to place items randomly within the overmap terrain.         |
+| `item_group_chance`           | % chance, between 1 and 100, that an item will be placed.                   |
+| `item_spawn_iterations`       | Number of times that the item spawning will be called.                      |
+| `clear_groundcover`           | Clear all previously defined `groundcover` for this overmap terrain.        |
+| `groundcover`                 | Weighted list of terrains used for base groundcover.                        |
+| `clear_components`            | Clear all previously defined `components` for this overmap terrain.         |
+| `components`                  | Collection of components that make up the terrains and furniture placed.    |
+| `clear_terrain_furniture`     | Clear all previously defined `terrain_furniture` for this overmap terrain.  |
+| `terrain_furniture`           | Collection of furniture conditionally placed based on terrain.              |
 
 ### Example
 
-```json
+```jsonc
 {
 	"forest": {
 		"terrains" : [ "forest" ],
@@ -262,8 +262,8 @@ for the components are only relevant for the purposes of overriding them in regi
 
 ### Fields
 
-|  Identifier   |                             Description                              |
-| ------------- | -------------------------------------------------------------------- |
+| Identifier    | Description                                                          |
+|---------------|----------------------------------------------------------------------|
 | `sequence`    | Sequence in which components are processed.                          |
 | `chance`      | One in X chance that something from this component will be placed.   |
 | `clear_types` | Clear all previously defined `types` for this component.             |
@@ -271,7 +271,7 @@ for the components are only relevant for the purposes of overriding them in regi
 
 ### Example
 
-```json
+```jsonc
 {
 	"trees": {
 		"sequence": 0,
@@ -329,15 +329,15 @@ water only, while this does.
 
 ### Fields
 
-|    Identifier     |                            Description                             |
-| ----------------- | ------------------------------------------------------------------ |
+| Identifier        | Description                                                        |
+|-------------------|--------------------------------------------------------------------|
 | `chance`          | One in X chance that furniture from this component will be placed. |
 | `clear_furniture` | Clear all previously defined `furniture` for this terrain.         |
 | `furniture`       | Weighted list of furniture that will be placed on this terrain.    |
 
 ### Example
 
-```json
+```jsonc
 {
 	"t_water_sh" : {
 		"chance": 2,
@@ -357,8 +357,8 @@ trailheads, and some general tuning of the actual trail width/position in mapgen
 
 ### Fields
 
-|         Identifier         |                                         Description                                         |
-| -------------------------- | ------------------------------------------------------------------------------------------- |
+| Identifier                 | Description                                                                                 |
+|----------------------------|---------------------------------------------------------------------------------------------|
 | `chance`                   | One in X chance a contiguous forest will have a trail system.                               |
 | `border_point_chance`      | One in X chance that the N/S/E/W-most point of the forest will be part of the trail system. |
 | `minimum_forest_size`      | Minimum contiguous forest size before a trail system can be spawned.                        |
@@ -371,7 +371,7 @@ trailheads, and some general tuning of the actual trail width/position in mapgen
 
 ### Example
 
-```json
+```jsonc
 {
 	"forest_trail_settings": {
 		"chance": 2,
@@ -395,8 +395,8 @@ The **overmap_connection_settings** section defines the `overmap_connection_id`s
 
 ### Fields
 
-|          Identifier          |                                                    Description                                     |
-| ---------------------------- | -------------------------------------------------------------------------------------------------- |
+| Identifier                   | Description                                                                                        |
+|------------------------------|----------------------------------------------------------------------------------------------------|
 | `intra_city_road_connection` | overmap_connection id used within cities. Should include locations for road and road_nesw_manhole. |
 | `inter_city_road_connection` | overmap_connection id used between cities. Should include locations for the intra city terrains.   |
 | `trail_connection`           | overmap_connection id used for forest trails.                                                      |
@@ -406,7 +406,7 @@ The **overmap_connection_settings** section defines the `overmap_connection_id`s
 
 ### Example
 
-```json
+```jsonc
 {
 	"overmap_connection_settings": {
 		"intra_city_road_connection": "cobbled_road",
@@ -423,14 +423,14 @@ relative placements of various classes of buildings.
 
 ### Fields
 
-|       Identifier        |                            Description                             |
-| ----------------------- | ------------------------------------------------------------------ |
-| `type`                  | City type identifier--currently unused.                            |
-| `shop_radius`           | Radial frequency of shop placement. Smaller number = more shops.   |
-| `park_radius`           | Radial frequency of park placement. Smaller number = more parks.   |
-| `houses`                | Weighted list of overmap terrains and specials used for houses.    |
-| `parks`                 | Weighted list of overmap terrains and specials used for parks.     |
-| `shops`                 | Weighted list of overmap terrains and specials used for shops.     |
+| Identifier    | Description                                                      |
+|---------------|------------------------------------------------------------------|
+| `type`        | City type identifier--currently unused.                          |
+| `shop_radius` | Radial frequency of shop placement. Smaller number = more shops. |
+| `park_radius` | Radial frequency of park placement. Smaller number = more parks. |
+| `houses`      | Weighted list of overmap terrains and specials used for houses.  |
+| `parks`       | Weighted list of overmap terrains and specials used for parks.   |
+| `shops`       | Weighted list of overmap terrains and specials used for shops.   |
 
 ### Placing shops, parks, and houses
 
@@ -441,7 +441,7 @@ place the shop or park are based on the formula `rng( 0, 99 ) > X_radius * dista
 / city size`.
 
 ### Example
-```json
+```jsonc
 {
 	"city": {
 		"type": "town",
@@ -474,14 +474,14 @@ terrain. This includes both the chance of an extra occurring as well as the weig
 
 ### Fields
 
-| Identifier |                           Description                            |
-| ---------- | ---------------------------------------------------------------- |
+| Identifier | Description                                                      |
+|------------|------------------------------------------------------------------|
 | `chance`   | One in X chance that the overmap terrain will spawn a map extra. |
 | `extras`   | Weighted list of map extras that can spawn.                      |
 
 ### Example
 
-```json
+```jsonc
 {
 	"map_extras": {
 		"field": {
@@ -501,20 +501,20 @@ The **weather** section defines the base weather attributes used for the region.
 
 ### Fields
 
-|     Identifier                 |                              Description                              |
-| ------------------------------ | --------------------------------------------------------------------- |
-| `base_temperature`             | Base temperature for the region in degrees Celsius.                   |
-| `base_humidity`                | Base humidity for the region in relative humidity %                   |
-| `base_pressure`                | Base pressure for the region in millibars.                            |
-| `base_wind`                    | Base wind for the region in mph units. Roughly the yearly average.    |
-| `base_wind_distrib_peaks`      | How high the wind peaks can go. Higher values produce windier days.   |
-| `base_wind_season_variation`   | How the wind varies with season. Lower values produce more variation  |
-| `weather_black_list`           | Ids of weather types not allowed in this region.                      |
-| `weather_white_list`           | Ids of the only weather types allowed in this region.                 |
+| Identifier                   | Description                                                          |
+|------------------------------|----------------------------------------------------------------------|
+| `base_temperature`           | Base temperature for the region in degrees Celsius.                  |
+| `base_humidity`              | Base humidity for the region in relative humidity %                  |
+| `base_pressure`              | Base pressure for the region in millibars.                           |
+| `base_wind`                  | Base wind for the region in mph units. Roughly the yearly average.   |
+| `base_wind_distrib_peaks`    | How high the wind peaks can go. Higher values produce windier days.  |
+| `base_wind_season_variation` | How the wind varies with season. Lower values produce more variation |
+| `weather_black_list`         | Ids of weather types not allowed in this region.                     |
+| `weather_white_list`         | Ids of the only weather types allowed in this region.                |
 
 ### Example
 
-```json
+```jsonc
 {
 	"weather": {
 		"base_temperature": 6.5,
@@ -537,8 +537,8 @@ This is currently used to provide a mechanism for whitelisting and blacklisting 
 
 ### Fields
 
-|    Identifier     |                                        Description                                         |
-| ----------------- | ------------------------------------------------------------------------------------------ |
+| Identifier        | Description                                                                                |
+|-------------------|--------------------------------------------------------------------------------------------|
 | `clear_blacklist` | Clear all previously defined `blacklist`.                                                  |
 | `blacklist`       | List of flags. Any location with a matching flag will be excluded from overmap generation. |
 | `clear_whitelist` | Clear all previously defined `whitelist`.                                                  |
@@ -546,7 +546,7 @@ This is currently used to provide a mechanism for whitelisting and blacklisting 
 
 ### Example
 
-```json
+```jsonc
 {
 	"overmap_feature_flag_settings": {
 		"clear_blacklist": false,
@@ -565,8 +565,8 @@ those values which should be changed.
 
 ### Fields
 
-| Identifier |                                         Description                                         |
-| ---------- | ------------------------------------------------------------------------------------------- |
+| Identifier | Description                                                                                 |
+|------------|---------------------------------------------------------------------------------------------|
 | `type`     | Type identifier. Must be "region_overlay".                                                  |
 | `id`       | Unique identifier for this region overlay.                                                  |
 | `regions`  | A list of regions to which this overlay should be applied. "all" will apply to all regions. |
@@ -574,7 +574,7 @@ those values which should be changed.
 All additional fields and sections are as defined for a `region_overlay`.
 
 ### Example
-```json
+```jsonc
 [
 	{
 		"type": "region_overlay",

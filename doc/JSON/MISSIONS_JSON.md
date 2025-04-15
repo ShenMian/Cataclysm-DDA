@@ -2,7 +2,7 @@
 
 NPCs can assign missions to the player.  There is a fairly regular structure for this:
 
-```JSON
+```jsonc
   {
     "id": "MISSION_GET_BLACK_BOX_TRANSCRIPT",
     "type": "mission_definition",
@@ -61,7 +61,7 @@ Supports variable objects and math expressions.
 Not required, but it's strongly recommended that you summarize all relevant info for the mission.
 You may refer to mission end effects of the "u_buy_item" type, as long as they do not come at a
 cost to the player. See the example below:
-```JSON
+```jsonc
     "id": "MISSION_EXAMPLE_TOKENS",
     "type": "mission_definition",
     "name": "Murder Money",
@@ -82,7 +82,7 @@ If true, the NPC giving this mission will refuse to speak on any other topics be
 Must be included, and must be one of these strings:
 
 Goal string               | Goal conditions
----                       | ---
+--------------------------|------------------------------------------------------------------------
 `MGOAL_GO_TO`             | Reach a specific overmap tile
 `MGOAL_GO_TO_TYPE`        | Reach any instance of a specified overmap tile type
 `MGOAL_COMPUTER_TOGGLE`   | Activating the correct terminal will complete the mission
@@ -125,17 +125,17 @@ Optional bool, defaults to false.  If true when this mission is finished it won'
 This is a dictionary of strings.  The NPC says these exact strings in response to the player
 inquiring about the mission or reporting its completion.  All these strings are required, even if they may not be used in the mission.
 
-String ID            | Usage
----                  | ---
-`describe`           | The NPC's overall description of the mission
-`offer`              | The specifics of the mission given when the player selects that mission for consideration
-`accepted`           | The NPC's response if the player accepts the mission
-`rejected`           | The NPC's response if the player refuses the mission
-`advice`             | If the player asks for advice on how to complete the mission, they hear this
-`inquire`            | This is used if the NPC asks the player how the mission is going
-`success`            | The NPC's response to a report that the mission was successful
-`success_lie`        | The NPC's response if they catch the player lying about a mission's success
-`failure`            | The NPC's response if the player reports a failed mission
+String ID     | Usage
+--------------|------------------------------------------------------------------------------------------
+`describe`    | The NPC's overall description of the mission
+`offer`       | The specifics of the mission given when the player selects that mission for consideration
+`accepted`    | The NPC's response if the player accepts the mission
+`rejected`    | The NPC's response if the player refuses the mission
+`advice`      | If the player asks for advice on how to complete the mission, they hear this
+`inquire`     | This is used if the NPC asks the player how the mission is going
+`success`     | The NPC's response to a report that the mission was successful
+`success_lie` | The NPC's response if they catch the player lying about a mission's success
+`failure`     | The NPC's response if the player reports a failed mission
 
 ### start
 Optional field.  If it is present and a string, it must be name of a function in mission_start::
@@ -151,13 +151,13 @@ If any of these optional fields are present they can be objects with the followi
 ### origin
 This determines how the player can be given this mission. There are a number of different options for this as follows.
 
-String ID             | Usage
----                   | ---
-`ORIGIN_GAME_START`   | Given when the game starts
-`ORIGIN_OPENER_NPC`   | NPC comes up to you when the game starts
-`ORIGIN_ANY_NPC`      | Any NPC
-`ORIGIN_SECONDARY`    | Given at the end of another mission
-`ORIGIN_COMPUTER`     | Taken after reading investigation provoking entries in computer terminal
+String ID           | Usage
+--------------------|-------------------------------------------------------------------------
+`ORIGIN_GAME_START` | Given when the game starts
+`ORIGIN_OPENER_NPC` | NPC comes up to you when the game starts
+`ORIGIN_ANY_NPC`    | Any NPC
+`ORIGIN_SECONDARY`  | Given at the end of another mission
+`ORIGIN_COMPUTER`   | Taken after reading investigation provoking entries in computer terminal
 
 #### effect
 This is an effects array, exactly as defined in [NPCs.md](./NPCs.md), and can use any of the values from
@@ -176,25 +176,25 @@ necessary) a particular overmap terrain and designating it as the mission target
 allow control over how it is picked and how some effects (such as revealing the surrounding area)
 are applied afterwards. The `om_terrain` is the only required field.
 
-Identifier             | Description
----                    | ---
-`om_terrain`           | ID of overmap terrain which will be selected as the target. Mandatory.  String or or [variable object](#variable-object)
-`om_terrain_match_type`| Matching rule to use with `om_terrain`. Defaults to TYPE. Details below.
-`om_special`           | ID of overmap special containing the overmap terrain.  String or or [variable object](#variable-object)
-`om_terrain_replace`   | ID of overmap terrain to be found and replaced if `om_terrain` cannot be found. String or or [variable object](#variable-object)
-`reveal_radius`        | Radius in overmap terrain coordinates to reveal.  Int or or [variable object](#variable-object)
-`must_see`             | If true, the `om_terrain` must have been seen already.
-`cant_see`             | If true, the `om_terrain` must not have been seen already.
-`random`               | If true, a random matching `om_terrain` is used. If false, the closest is used.
-`search_range`         | Maximum range in overmap terrain coordinates to look for a matching `om_terrain`.  Int or or [variable object](#variable-object). Default 2520. Should only be used to limit maximum range when multiple valid destinations are possible, and only works to do that when random is also set to true.
-`min_distance`         | Range in overmap terrain coordinates.  Instances of `om_terrain` in this range will be ignored.  Int or or [variable object](#variable-object)
-`origin_npc`           | Start the search at the NPC's, rather than the player's, current position.
-`z`                    | If specified, will be used rather than the player or NPC's z when searching.  Int or or [variable object](#variable-object)
-`var`                  | A variable_object ( see `variable_object` in [doc](NPCs.md#variable-object) ), if set this variable's value will be used.
+Identifier                                 | Description
+-------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+`om_terrain`                               | ID of overmap terrain which will be selected as the target. Mandatory.  String or or [variable object](#variable-object)
+`om_terrain_match_type`                    | Matching rule to use with `om_terrain`. Defaults to TYPE. Details below.
+`om_special`                               | ID of overmap special containing the overmap terrain.  String or or [variable object](#variable-object)
+`om_terrain_replace`                       | ID of overmap terrain to be found and replaced if `om_terrain` cannot be found. String or or [variable object](#variable-object)
+`reveal_radius`                            | Radius in overmap terrain coordinates to reveal.  Int or or [variable object](#variable-object)
+`must_see`                                 | If true, the `om_terrain` must have been seen already.
+`cant_see`                                 | If true, the `om_terrain` must not have been seen already.
+`random`                                   | If true, a random matching `om_terrain` is used. If false, the closest is used.
+`search_range`                             | Maximum range in overmap terrain coordinates to look for a matching `om_terrain`.  Int or or [variable object](#variable-object). Default 2520. Should only be used to limit maximum range when multiple valid destinations are possible, and only works to do that when random is also set to true.
+`min_distance`                             | Range in overmap terrain coordinates.  Instances of `om_terrain` in this range will be ignored.  Int or or [variable object](#variable-object)
+`origin_npc`                               | Start the search at the NPC's, rather than the player's, current position.
+`z`                                        | If specified, will be used rather than the player or NPC's z when searching.  Int or or [variable object](#variable-object)
+`var`                                      | A variable_object ( see `variable_object` in [doc](NPCs.md#variable-object) ), if set this variable's value will be used.
 `offset_x`,<br\>`offset_y`,<br\>`offset_z` | After finding or creating `om_terrain`, offset the mission target terrain by the offsets in overmap terrain coordinates.
 
 **example**
-```JSON
+```jsonc
 {
   "assign_mission_target": {
     "om_terrain": "necropolis_c_44",
@@ -271,7 +271,7 @@ An NPC, monster, or computer placed using `update_mapgen` will be the target of 
 
 ## Adding new missions to NPC dialogue
 In order to assign missions to NPCs, the first step is to find that NPC's definition.  For unique NPCs this is usually at the top of the npc's JSON file and looks something like this:
-```JSON
+```jsonc
 {
   "type": "npc",
   "id": "refugee_beggar2",
@@ -303,7 +303,7 @@ Either of these options will allow the player to do normal mission management di
 
 This is an example of how a custom mission inquiry might appear.  This will only appear in the NPC's dialogue
 options if the player has already been assigned a mission.
-```JSON
+```jsonc
 {
   "type": "talk_topic",
   "//": "Generic responses for Old Guard Necropolis NPCs that can have missions",

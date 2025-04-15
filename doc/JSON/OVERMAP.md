@@ -95,7 +95,7 @@ F^^|^^^.^..F.FFF
 
 So for example, the `F` is a forest which has a definition like this:
 
-```json
+```jsonc
 {
     "type": "overmap_terrain",
     "id": "forest",
@@ -107,7 +107,7 @@ So for example, the `F` is a forest which has a definition like this:
 
 and the `^` is a house which has a definition like this:
 
-```json
+```jsonc
 {
     "type": "overmap_terrain",
     "id": "house",
@@ -137,7 +137,7 @@ be placed in a forest/field/river, etc).
 When retiring or migrating an overmap special, the id should be defined in a new `overmap_special_migration`,
 usually defined in `data/json/overmap/overmap_special/overmap_special_migration.json` as follows:
 
-```json
+```jsonc
 {
   "type": "overmap_special_migration",
   "id": "Military Bunker",
@@ -175,7 +175,7 @@ Simply put, an **overmap_location** is just a named collection of **overmap_terr
 
 For example, here are two simple definitions.
 
-```json
+```jsonc
 {
     "type": "overmap_location",
     "id": "forest",
@@ -197,7 +197,7 @@ groups.
 For example, with the addition of a new forest overmap terrain `forest_thick`, we only have to
 update these definitions as follows:
 
-```json
+```jsonc
 {
     "type": "overmap_location",
     "id": "forest",
@@ -238,14 +238,14 @@ rotation for the referenced overmap terrains (e.g. the `_north` version for all)
 
 ### Fields
 
-|    Identifier     |                                           Description                                            |
-| ----------------- | ------------------------------------------------------------------------------------------------ |
-| `type`            | Must be `"overmap_terrain"`.                                                                     |
-| `id`              | Unique id.                                                                                       |
-| `name`            | Name for the location shown in game.                                                             |
-| `sym`             | Symbol used when drawing the location, like `"F"` (or you may use an ASCII value like `70`).     |
-| `color`           | Color to draw the symbol in. See [COLOR.md](COLOR.md).                                           |
-| `looks_like`      | Id of another overmap terrain to be used for the graphical tile, if this doesn't have one.       |
+| Identifier   | Description                                                                                  |
+|--------------|----------------------------------------------------------------------------------------------|
+| `type`       | Must be `"overmap_terrain"`.                                                                 |
+| `id`         | Unique id.                                                                                   |
+| `name`       | Name for the location shown in game.                                                         |
+| `sym`        | Symbol used when drawing the location, like `"F"` (or you may use an ASCII value like `70`). |
+| `color`      | Color to draw the symbol in. See [COLOR.md](COLOR.md).                                       |
+| `looks_like` | Id of another overmap terrain to be used for the graphical tile, if this doesn't have one.   |
 | `vision_levels`   | Id of a `oter_vision` that describes how this overmap terrain will be displayed when there is not full vision of the tile.
 | `connect_group`   | Specify that this overmap terrain might be graphically connected to its neighbours, should a tileset wish to.  It will connect to any other `overmap_terrain` with the same `connect_group`. |
 | `see_cost`        | Affects player vision on overmap.  See table below for possible values.                          |
@@ -267,23 +267,23 @@ rotation for the referenced overmap terrains (e.g. the `_north` version for all)
 
 ### `see_cost` values
 
-| name | role |
-|------|------|
-| `"all_clear"` | This tile has no or minimal horizontal obstacles and can be seen down through |
-| `"none"` | This tile has no or minimal horizontal obstacles - most flat terrain |
-| `"low"` | This tile has low horizontal obstacles or few higher obstacles |
-| `"medium"` | This tile has medium horizontal obstacles |
-| `"spaced_high"` | This tile has high obstacles, but they are spaced and have several gaps - a forest |
-| `"high"` | This tile has high obstacles, but still allows some sight around it - most buildings |
-| `"full_high"` | This tile has high obstacles, and effectively cannot be seen through - multi-tile buildings |
-| `"opaque"` | This tile cannot be seen through under any circumstance |
+| name            | role                                                                                        |
+|-----------------|---------------------------------------------------------------------------------------------|
+| `"all_clear"`   | This tile has no or minimal horizontal obstacles and can be seen down through               |
+| `"none"`        | This tile has no or minimal horizontal obstacles - most flat terrain                        |
+| `"low"`         | This tile has low horizontal obstacles or few higher obstacles                              |
+| `"medium"`      | This tile has medium horizontal obstacles                                                   |
+| `"spaced_high"` | This tile has high obstacles, but they are spaced and have several gaps - a forest          |
+| `"high"`        | This tile has high obstacles, but still allows some sight around it - most buildings        |
+| `"full_high"`   | This tile has high obstacles, and effectively cannot be seen through - multi-tile buildings |
+| `"opaque"`      | This tile cannot be seen through under any circumstance                                     |
 
 ### Example
 
 A real `overmap_terrain` wouldn't have all these defined at the same time, but in the interest of
 an exhaustive example...
 
-```json
+```jsonc
 {
     "type": "overmap_terrain",
     "id": "field",
@@ -320,20 +320,20 @@ an exhaustive example...
 
 ### Fields
 
-| Identifier | Description |
-|------------|-------------|
-| type       | Must be `oter_vision` |
-| id         | Identifier of this `oter_vision`. Cannot contain a `$`. |
+| Identifier | Description                                                                                                                      |
+|------------|----------------------------------------------------------------------------------------------------------------------------------|
+| type       | Must be `oter_vision`                                                                                                            |
+| id         | Identifier of this `oter_vision`. Cannot contain a `$`.                                                                          |
 | levels     | Array of vision levels. Between 0 and 3 can be specified. The information is specified in the order of vague, outlines, detailed |
 
 For levels, each entry is a JSON object with the following fields
 
-| Identifier | Description |
-|------------|-------------|
-| name       | Same as an overmap_terrain name |
-| sym        | Same as an overmap_terrain sym |
-| color      | Same as an overmap_terrain color |
-| looks_like | overmap_terrain id that will be drawn if there is no tile drawn |
+| Identifier      | Description                                                                                                                                  |
+|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| name            | Same as an overmap_terrain name                                                                                                              |
+| sym             | Same as an overmap_terrain sym                                                                                                               |
+| color           | Same as an overmap_terrain color                                                                                                             |
+| looks_like      | overmap_terrain id that will be drawn if there is no tile drawn                                                                              |
 | blends_adjacent | If true, the other fields will be ignored and instead of drawing this tile, the most common adjacent tile will be selected and drawn instead |
 
 For tilesets, the id for each level will be specified as: `id$VISION_LEVEL`, where `VISION_LEVEL` is
@@ -341,7 +341,7 @@ replaced by one of `vague`, `outlines`, or `details`.
 
 ### Example
 
-```json
+```jsonc
 {
   "type": "oter_vision",
   "id": "example_vision",
@@ -452,32 +452,32 @@ original intersection.
 
 ### Fields
 
-|   Identifier    |                                              Description                                              |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| `type`          | Must be `"overmap_special"`.                                                                          |
-| `id`            | Unique id.                                                                                            |
-| `subtype`       | Either `"fixed"` or `"mutable"`.  Defaults to `"fixed"` if not specified.                             |
-| `locations`     | List of `overmap_location` ids that the special may be placed on.                                     |
-| `city_distance` | Min/max distance from a city edge that the special may be placed. Use -1 for unbounded.               |
-| `city_sizes`    | Min/max city size for a city that the special may be placed near. Use -1 for unbounded.               |
-| `occurrences`   | Min/max number of occurrences when placing the special. If either of OVERMAP_UNIQUE or GLOBALLY_UNIQUE flags is set, becomes X of Y chance. |
+| Identifier      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `type`          | Must be `"overmap_special"`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `id`            | Unique id.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `subtype`       | Either `"fixed"` or `"mutable"`.  Defaults to `"fixed"` if not specified.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `locations`     | List of `overmap_location` ids that the special may be placed on.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `city_distance` | Min/max distance from a city edge that the special may be placed. Use -1 for unbounded.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `city_sizes`    | Min/max city size for a city that the special may be placed near. Use -1 for unbounded.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `occurrences`   | Min/max number of occurrences when placing the special. If either of OVERMAP_UNIQUE or GLOBALLY_UNIQUE flags is set, becomes X of Y chance.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `priority`      | **Warning: Do not use this unnecessarily.** The generation process is executed in the order of specials with the highest value. Can be used when maps are difficult to generate. (large maps, maps that are or require dependencies etc) It is **strongly recommended** to set it to 1 (HIGH priority) or -1 (LOW priority) if used. (default = 0).  It is adviced that map specials marked with the SAFE_AT_WORLDGEN are given a priority of 1 unless there are reasons not to, in order to exist when specials spawning monsters in an area are spawned, as that will cause the latter not to spawn that close. |
-| `flags`         | See `Overmap specials` in [JSON_FLAGS.md](JSON_FLAGS.md).                                             |
-| `rotate`        | Whether the special can rotate. True if not specified.                                                |
+| `flags`         | See `Overmap specials` in [JSON_FLAGS.md](JSON_FLAGS.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `rotate`        | Whether the special can rotate. True if not specified.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 Depending on the subtype, there are further relevant fields:
 
 #### Further fields for fixed overmap specials
 
-|   Identifier    |                                              Description                                              |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| `overmaps`      | List of overmap terrains and their relative `[ x, y, z ]` location within the special.                |
-| `connections`   | List of overmap connections and their relative `[ x, y, z ]` location within the special.             |
+| Identifier    | Description                                                                               |
+|---------------|-------------------------------------------------------------------------------------------|
+| `overmaps`    | List of overmap terrains and their relative `[ x, y, z ]` location within the special.    |
+| `connections` | List of overmap connections and their relative `[ x, y, z ]` location within the special. |
 
 #### Further fields for mutable overmap specials
 
-|        Identifier          |                                                    Description                                                     |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Identifier                 | Description                                                                                                        |
+|----------------------------|--------------------------------------------------------------------------------------------------------------------|
 | `check_for_locations`      | List of pairs `[ [ x, y, z ], [ locations, ... ] ]` defining the locations that must exist for initial placement.  |
 | `check_for_locations_area` | List of check_for_locations area objects to be considered in addition to the explicit `check_for_locations` pairs. |
 | `overmaps`                 | Definitions of the various overmaps and how they join to one another.                                              |
@@ -486,7 +486,7 @@ Depending on the subtype, there are further relevant fields:
 
 ### Example fixed special
 
-```json
+```jsonc
 [
   {
     "type": "overmap_special",
@@ -510,8 +510,8 @@ Depending on the subtype, there are further relevant fields:
 
 ### Fixed special overmaps
 
-| Identifier  |                                                                                      Description                                                                                           |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Identifier  | Description                                                                                                                                                                                |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `point`     | `[ x, y, z]` of the overmap terrain within the special.                                                                                                                                    |
 | `overmap`   | Id of the `overmap_terrain` to place at the location. If omitted no overmap_terrain is placed but the point will still be checked for valid locations when deciding if placement is valid. |
 | `locations` | List of `overmap_location` ids that this overmap terrain may be placed on. Overrides the specials overall `locations` field.                                                               |
@@ -520,8 +520,8 @@ Depending on the subtype, there are further relevant fields:
 
 ### Connections
 
-| Identifier   |                                           Description                                              |
-| ------------ | -------------------------------------------------------------------------------------------------- |
+| Identifier   | Description                                                                                        |
+|--------------|----------------------------------------------------------------------------------------------------|
 | `point`      | `[ x, y, z]` of the connection end point. Cannot overlap an overmap terrain entry for the special. |
 | `terrain`    | Will go away in favor of `connection` eventually. Use `road`, `subway`, `sewer`, etc.              |
 | `connection` | Id of the `overmap_connection` to build. Optional for now, but you should specify it explicitly.   |
@@ -530,7 +530,7 @@ Depending on the subtype, there are further relevant fields:
 
 ### Example mutable special
 
-```json
+```jsonc
 [
   {
     "type": "overmap_special",
@@ -625,7 +625,7 @@ consistent with the `north` join for the generated map to make sense.
 Overmaps can also specify connections.  For example, an overmap might be
 defined as:
 
-```json
+```jsonc
 "where_road_connects": {
   "overmap": "road_end_north",
   "west": "parking_lot_to_road",
@@ -704,7 +704,7 @@ A placement rule in the phases can specify multiple overmaps to be placed in a
 particular configuration.  This is useful if you want to place some feature
 that's larger than a single OMT.  Here is an example from the microlab:
 
-```json
+```jsonc
 {
   "name": "subway_chunk_at_-2",
   "chunk": [
@@ -753,14 +753,14 @@ to be considered in addition to the `check_for_locations` constraints. It is an 
 of objects that define a singular location, as well as a `from` and `to` tripoint that
 define the square region of constraints, like this:
 
-```json
+```jsonc
 "check_for_locations_area": [
   { "type": [ "subterranean_empty" ], "from": [ -1, -1, -1 ], "to": [ 1, 1, -1 ] }
 ],
 ```
 For the above, the `check_for_locations_area` field is equivalent to manually adding
 the following constraints to the `check_for_locations` array:
-```json
+```jsonc
 [ [ 0, 0, -1 ], [ "subterranean_empty" ] ],
 [ [ 1, 0, -1 ], [ "subterranean_empty" ] ],
 [ [ 0, 1, -1 ], [ "subterranean_empty" ] ],
@@ -784,7 +784,7 @@ Each join also has an associated list of locations.  This defaults to
 the locations for the special, but it can be overridden for a particular join
 like this:
 
-```json
+```jsonc
 "joins": [
   { "id": "surface_to_surface", "into_locations": [ "land" ] },
   "tunnel_to_tunnel"
@@ -833,7 +833,7 @@ joins.  This feature can also be used in other phases.
 When specifying the joins associated with an overmap in a mutable special, you
 can elaborate with a type, like this example from the [`homeless_camp_mutable`](../data/json/overmap/overmap_mutable/homeless_camp_mutable.json) overmap special:
 
-```json
+```jsonc
 "overmaps": {
       "camp_core": {
         "overmap": "homelesscamp_north",
@@ -879,7 +879,7 @@ subterranean components need different locations.  We could improve the
 definition of its joins by making the join between surface and tunnels
 asymmetric, like this:
 
-```json
+```jsonc
 "joins": [
   { "id": "surface_to_tunnel", "opposite": "tunnel_to_surface" },
   { "id": "tunnel_to_surface", "opposite": "surface_to_tunnel", "into_locations": [ "land" ] },
@@ -910,7 +910,7 @@ type of join?  Alternative joins can help us here.
 
 The definition of the `microlab` overmap might look like this:
 
-```json
+```jsonc
 "microlab": {
   "overmap": "microlab_generic",
   "north": { "id": "microlab_to_microlab", "alternatives": [ "microlab_to_hallway" ] },
@@ -942,11 +942,11 @@ find most ways in which placement might fail.
 A join definition can be a simple string, which will be its id.  Alternatively,
 it can be a dictionary with some of these keys:
 
-| Identifier  |                                Description                                 |
-| ----------- | -------------------------------------------------------------------------- |
-| `id`        | Id of the join being defined.                                              |
-| `opposite`  | Id of the join which must match this one from the adjacent terrain.        |
-| `into_locations` | List of `overmap_location` ids that this join may point towards.      |
+| Identifier       | Description                                                         |
+|------------------|---------------------------------------------------------------------|
+| `id`             | Id of the join being defined.                                       |
+| `opposite`       | Id of the join which must match this one from the adjacent terrain. |
+| `into_locations` | List of `overmap_location` ids that this join may point towards.    |
 
 ### Mutable special overmaps
 
@@ -954,33 +954,33 @@ The overmaps are a JSON dictionary.  Each overmap must have an id (local to
 this special) which is the JSON dictionary key, and then the fields within the
 value may be:
 
-| Identifier  |                                Description                                 |
-| ----------- | -------------------------------------------------------------------------- |
-| `overmap`   | Id of the `overmap_terrain` to place at the location.                      |
+| Identifier  | Description                                                                                                                                                  |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `overmap`   | Id of the `overmap_terrain` to place at the location.                                                                                                        |
 | `locations` | List of `overmap_location` ids that this overmap terrain may be placed on.  If not specified, defaults to the `locations` value from the special definition. |
-| `north`     | Join which must align with the north edge of this OMT                      |
-| `east`      | Join which must align with the east edge of this OMT                       |
-| `south`     | Join which must align with the south edge of this OMT                      |
-| `west`      | Join which must align with the west edge of this OMT                       |
-| `above`     | Join which must link this to the OMT above                                 |
-| `below`     | Join which must link this to the OMT below                                 |
+| `north`     | Join which must align with the north edge of this OMT                                                                                                        |
+| `east`      | Join which must align with the east edge of this OMT                                                                                                         |
+| `south`     | Join which must align with the south edge of this OMT                                                                                                        |
+| `west`      | Join which must align with the west edge of this OMT                                                                                                         |
+| `above`     | Join which must link this to the OMT above                                                                                                                   |
+| `below`     | Join which must link this to the OMT below                                                                                                                   |
 
 Each join associated with a direction can be a simple string, interpreted as a
 join id.  Alternatively it can be a JSON object with the following keys:
 
-| Identifier     |                                Description                                 |
-| -------------- | -------------------------------------------------------------------------- |
-| `id`           | Id of the join used here.                                                  |
-| `type`         | Either `"mandatory"` or `"available"`.  Default: `"mandatory"`.            |
+| Identifier     | Description                                                                                                                                                                                |
+|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`           | Id of the join used here.                                                                                                                                                                  |
+| `type`         | Either `"mandatory"` or `"available"`.  Default: `"mandatory"`.                                                                                                                            |
 | `alternatives` | List of join ids that may be used instead of the one listed under `id`, but only when placing this overmap.  Unresolved joins created by its placement will only be the primary join `id`. |
 
 ### Generation rules
 
-| Identifier  |                                Description                                 |
-| ----------- | -------------------------------------------------------------------------- |
-| `overmap`   | Id of the `overmap` to place.                                              |
-| `max`       | Maximum number of times this rule should be used.                          |
-| `weight`    | Weight with which to select this rule.                                     |
+| Identifier | Description                                       |
+|------------|---------------------------------------------------|
+| `overmap`  | Id of the `overmap` to place.                     |
+| `max`      | Maximum number of times this rule should be used. |
+| `weight`   | Weight with which to select this rule.            |
 
 One of `max` and `weight` must be specified.  `max` will be used as the weight
 when `weight` is not specified.
@@ -1000,19 +1000,19 @@ by the frequency assigned to the city building within the `region_settings`. Con
 
 ### Fields
 
-| Identifier  |                                   Description                                    |
-| ----------- | -------------------------------------------------------------------------------- |
-| `type`      | Must be "city_building".                                                         |
-| `id`        | Unique id.                                                                       |
-| `overmaps`  | As in `overmap_special`, with one caveat: all point x and y values must be >= 0. |
-| `locations` | As in `overmap_special`.                                                         |
-| `flags`     | As in `overmap_special`.                                                         |
-| `rotate`    | As in `overmap_special`.                                                         |
-| `city_sizes`| As in `overmap_special`.                                                         |
+| Identifier   | Description                                                                      |
+|--------------|----------------------------------------------------------------------------------|
+| `type`       | Must be "city_building".                                                         |
+| `id`         | Unique id.                                                                       |
+| `overmaps`   | As in `overmap_special`, with one caveat: all point x and y values must be >= 0. |
+| `locations`  | As in `overmap_special`.                                                         |
+| `flags`      | As in `overmap_special`.                                                         |
+| `rotate`     | As in `overmap_special`.                                                         |
+| `city_sizes` | As in `overmap_special`.                                                         |
 
 ### Example
 
-```json
+```jsonc
 [
   {
     "type": "city_building",
@@ -1039,8 +1039,8 @@ by the frequency assigned to the city building within the `region_settings`. Con
 
 ### Fields
 
-| Identifier |                                           Description                                           |
-| ---------- | ----------------------------------------------------------------------------------------------- |
+| Identifier | Description                                                                                     |
+|------------|-------------------------------------------------------------------------------------------------|
 | `type`     | Must be "overmap_connection".                                                                   |
 | `id`       | Unique id.                                                                                      |
 | `subtypes` | List of entries used to determine valid locations, terrain cost, and resulting overmap terrain. |
@@ -1048,7 +1048,7 @@ by the frequency assigned to the city building within the `region_settings`. Con
 
 ### Example
 
-```json
+```jsonc
 [
   {
     "type": "overmap_connection",
@@ -1072,8 +1072,8 @@ by the frequency assigned to the city building within the `region_settings`. Con
 
 ### Subtypes
 
-|  Identifier  |                                                Description                                                 |
-| ------------ | ---------------------------------------------------------------------------------------------------------- |
+| Identifier   | Description                                                                                                |
+|--------------|------------------------------------------------------------------------------------------------------------|
 | `terrain`    | `overmap_terrain` to be placed when the placement location matches `locations`.                            |
 | `locations`  | List of `overmap_location` that this subtype applies to. Can be empty; signifies `terrain` is valid as is. |
 | `basic_cost` | Cost of this subtype when pathfinding a route. Default 0.                                                  |
@@ -1083,8 +1083,8 @@ by the frequency assigned to the city building within the `region_settings`. Con
 
 ### Fields
 
-| Identifier |                               Description                               |
-| ---------- | ----------------------------------------------------------------------- |
+| Identifier | Description                                                             |
+|------------|-------------------------------------------------------------------------|
 | `type`     | Must be "overmap_location".                                             |
 | `id`       | Unique id.                                                              |
 | `terrains` | List of `overmap_terrain` that can be considered part of this location. |
@@ -1092,7 +1092,7 @@ by the frequency assigned to the city building within the `region_settings`. Con
 
 ### Example
 
-```json
+```jsonc
 [
   {
     "type": "overmap_location",
@@ -1110,19 +1110,19 @@ Note that no random cities would be spawned if there is at least one city define
 
 ### Fields
 
-|    Identifier     |                                        Description                                         |
-| ----------------- | ------------------------------------------------------------------------------------------ |
-| `id`              | Id of the city.                                                                            |
-| `database_id`     | Id of the city in MA database.                                                             |
-| `name`            | Name of the city.                                                                          |
-| `population`      | Original population of the city.                                                           |
-| `size`            | Size of the city.                                                                          |
-| `pos_om`          | location of the city (in overmap coordinates).                                             |
-| `pos`             | location of the city (in overmap terrain coordinates).                                     |
+| Identifier    | Description                                            |
+|---------------|--------------------------------------------------------|
+| `id`          | Id of the city.                                        |
+| `database_id` | Id of the city in MA database.                         |
+| `name`        | Name of the city.                                      |
+| `population`  | Original population of the city.                       |
+| `size`        | Size of the city.                                      |
+| `pos_om`      | location of the city (in overmap coordinates).         |
+| `pos`         | location of the city (in overmap terrain coordinates). |
 
 ### Example
 
-```json
+```jsonc
 {
   {
     "type": "city",

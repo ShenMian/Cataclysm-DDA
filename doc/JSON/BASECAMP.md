@@ -19,7 +19,7 @@ Basecamp upgrade paths are defined by several related files:
 The recipe JSONs are standard recipe JSONs, with the addition of a few fields.
 
 New field                     | Description
---                            | --
+------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 `"construction_blueprint"`    | string, the `"update_mapgen_id"` of the mapgen update JSON that will be performed when the upgrade mission is complete.
 `"construction_name"`         | string, a short description/name of the upgrade mission that is displayed in the base camp mission selector.  The recipe's `"description"` field has the extended description that explains why a player might want to have an NPC perform this upgrade mission.
 `"blueprint_provides"`        | array of objects, with each object having an `"id"` string and an optional `"amount"` integer.  These are the camp features that are available when the upgrade mission is complete.  Every upgrade mission provides its recipe `"result"` with an amount of 1 automatically and that string does not need to be listed in `"blueprint_provides"`.
@@ -37,7 +37,7 @@ Every upgrade mission has its recipe `"result"` as a blueprint_provides and a bl
 These are arbitrary strings and can be used to control the branching of the upgrade paths.  However, some strings have meaning within the basecamp code:
 
 Provides `"id"`  | Meaning
---               | --
+-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 `"bed"`          | every 2 `"amount"`' of `"bed"` allows another expansion in the camp, to a maximum of 8, not include the camp center.
 `"tool_storage"` | after this upgrade mission is complete, the Store Tools mission will be available.
 `"radio"`        | after this upgrade mission is complete, two way radios communicating to the camp have extended range.
@@ -64,7 +64,7 @@ Provides `"id"`  | Meaning
 `blueprint_provides` can also be used to name objects from `recipe_group.json`. The recipes will be craftable by NPCs at that expansion, allowing the creation of custom recipes that can be performed exclusively at faction camps.
 
 ### Sample recipe JSON
-```JSON
+```jsonc
   {
     "type": "recipe",
     "result": "faction_base_camp_8",
@@ -102,7 +102,7 @@ the `"blueprint_provides"` of the previous upgrade missions.
 
 ### Sample mapgen update JSON
 
-```json
+```jsonc
   {
     "type": "mapgen",
     "update_mapgen_id": "faction_base_field_camp_7",
@@ -149,7 +149,7 @@ translatable) descriptions of the parameter options.  Those go in the recipe.
 
 For example, suppose this was your mapgen definition:
 
-```json
+```jsonc
 {
   "type": "mapgen",
   "method": "json",
@@ -185,7 +185,7 @@ for that parameter, and values are the human-readable descriptions of what that
 parameter means.  These descriptions will appear in the basecamp upgrade menu.
 For example:
 
-```json
+```jsonc
 {
   "type": "recipe",
   "activity_level": "MODERATE_EXERCISE",
@@ -217,7 +217,7 @@ the needs must be autocalculated.
 Recipe groups serve two purposes: they indicate what recipes can produced by the camp after an upgrade mission is completed, and they indicate what upgrade paths are available and where camps can be placed.
 
 There are two special recipe groups, `"all_faction_base_types"` and `"all_faction_base_expansions"`.  They both look like this:
-```json
+```jsonc
   {
     "type": "recipe_group",
     "name": "all_faction_base_expansions",
@@ -249,7 +249,7 @@ Each entry in the `"recipes"` array must be a dictionary with the `"id"`, `"desc
 
 Camp that can be made anywhere
 
-```json
+```jsonc
     {
         "id": "faction_base_barebones_0",
         "description": "Barebones Camp",
@@ -259,7 +259,7 @@ Camp that can be made anywhere
 
 Camp that can be placed on any overmap terrain starting `farmland_` or `hayfield_` or that match `"farmland"` or `"hayfield"` exactly
 
-```json
+```jsonc
     {
         "id": "faction_base_farmer_0",
         "description": "Farmer Camp",
@@ -272,7 +272,7 @@ Camp that can be placed on any overmap terrain starting `farmland_` or `hayfield
 
 Camp that can only be placed on `"omt_that_varies_in_shape"` if the parameter `"shape"` is set to either `"circle"` or `"circle_alt"` (but not say `"rectangle"` that would want different map updates)
 
-```json
+```jsonc
     {
         "id": "faction_base_circle_0",
         "description": "Farmer Camp",
@@ -307,16 +307,16 @@ The modular basecamp is a structure for designing basecamp upgrade paths.  You d
 A modular camp is laid out on a 24x24 overmap tile.  The outer 3 map squares on each side are reserved for fortifications and movement corridors, and the inner 18x18 map squares are divided into a 3x3 grid of 6x6 areas.
 
 | Area      | upper left position | lower right position |
-| --------- | ------------------- | -------------------- |
-| northwest |                3, 3 |                 8, 8 |
-| north     |                9, 3 |                14, 8 |
-| northeast |               15, 3 |                20, 8 |
-| west      |                3, 9 |                8, 14 |
-| center    |                9, 9 |               14, 14 |
-| east      |              15, 9, |               20, 14 |
-| southwest |               3, 15 |                8, 20 |
-| south     |               9, 15 |               14, 20 |
-| southeast |              15, 15 |               20, 20 |
+|-----------|---------------------|----------------------|
+| northwest | 3, 3                | 8, 8                 |
+| north     | 9, 3                | 14, 8                |
+| northeast | 15, 3               | 20, 8                |
+| west      | 3, 9                | 8, 14                |
+| center    | 9, 9                | 14, 14               |
+| east      | 15, 9,              | 20, 14               |
+| southwest | 3, 15               | 8, 20                |
+| south     | 9, 15               | 14, 20               |
+| southeast | 15, 15              | 20, 20               |
 
 Ideally, nested mapgen chunks should fit entirely into a 6x6 area.
 

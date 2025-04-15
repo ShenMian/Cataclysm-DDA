@@ -125,8 +125,8 @@ However, experience gain is a little more complicated to calculate.  The formula
 As noted above, few JSON fields are actually required for spells to work.  Some of the mandatory fields are:
 
 Identifier      | Description
----             |---
-`id`            |  Unique ID for the spell, used internally. Must be one continuous word, use underscores if necessary.
+----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+`id`            | Unique ID for the spell, used internally. Must be one continuous word, use underscores if necessary.
 `type`          | Indicates the JSON object is a `SPELL`.
 `name`          | Name of the spell that shows in game.
 `description`   | Description of the spell that shows in game.
@@ -145,7 +145,7 @@ In contrast, an `attack` spell using `effect_str` to grant a `self` buff (withou
 
 Each spell effect is defined in the `effect` field. For example, the Magus spell "Magic Missile" has the `attack` effect, meaning it deals damage to a specific target:
 
-```json
+```jsonc
   {
     "id": "magic_missile",
     "effect": "attack",
@@ -155,7 +155,7 @@ Each spell effect is defined in the `effect` field. For example, the Magus spell
 
 while the Druid spell "Nature's Bow" has the `spawn_item` effect, designating the ID of the item to spawn:
 
-```json
+```jsonc
   {
     "id": "druid_naturebow1",
     "effect": "spawn_item",
@@ -166,7 +166,7 @@ while the Druid spell "Nature's Bow" has the `spawn_item` effect, designating th
 Below is a table of currently implemented effects, along with special rules for how they work:
 
 Effect                 | Description
----                    |---
+-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 `add_trap`             | Adds a trap in the target tile.  This always succeeds (unless there is an existing trap) and only places 1 trap.  The `effect_str` is the id of the trap.
 `area_pull`            | Pulls `valid_targets` in its aoe toward the target location.  Currently, the pull distance is set to 1 (see `directed_push`).
 `area_push`            | Pushes `valid_targets` in its aoe away from the target location.  Currently, the push distance is set to 1 (see `directed_push`).
@@ -213,7 +213,7 @@ Effect                 | Description
 Another mandatory field is the spell shape. This dictates how the area of effect works:
 
 Shape   | Description
---      | --
+--------|----------------------------------------------------------------------------
 `blast` | A circular blast centered on the impact position.  Aoe value is the radius.
 `cone`  | Fires a cone with an arc equal to aoe in degrees.
 `line`  | Fires a line with a width equal to the aoe.
@@ -225,8 +225,8 @@ The following JSON fields are also used in spells and, while optional, greatly e
 
 All fields that are numeric also support a "variable object" (see [NPCs.md](NPCs.md) for full details).  Some fields are ignored by monsters and items.
 
-Field group | Description | Example
----  | --- | ---
+Field group                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                  | Example
+----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------
 `min_X`, `max_X`, ``X_increment`` | Minimum value, maximum value, and the value increase per level. <br>Note: a spell is not _set_ to have max_X at max lvl, max_X is the ceiling for the value: a spell with `min_damage: 0, max_damage: 100, damage_increment: 5` and `max_level: 10`, will deal 5 damage at lvl 1, 10 at lvl 2 and 50 at lvl 10, as [ 0 + ( 5 \* 10 ) ].  Similarly, if `max_damage` is instead 25, the damage will cap at spell lvl 5, as [ 0 + ( 5 \* 5 ) ] | `"min_damage": { "math": [ "u_skill('dodge') + u_val('intelligence')" ] },`,<br> `"min_range": 24,`,<br> `"min_aoe": { "math": [ "( VAR_1 / 3 )" ] },`.
 `min_damage`, `max_damage`, `damage_increment` |  "Damage" value of the spell by default (or healing, if value is negative).  The [spell effect](MAGIC.md#spell-effects) can modify its function.  When the spell doesn't increase by level (such as a monster spell), `min_damage` and `max_damage` can be set at the same value (`"min_damage": 15, "max_damage": 15`), `damage_increment` can be omitted. | "min_damage": 0,  <br>"max_damage": 100,  <br>"damage_increment": 5,|
 `min_duration`, `max_duration`, `duration_increment` | Duration of the spell `effects` and `effect_str`, depending on the type of the ID.  Written in moves, so `100` means `1 second`, `1 minute` as `6000`, and so on. | "min_duration": 100, <br>"max_duration": 6000, <br>"duration_increment": 100,
@@ -260,7 +260,7 @@ Field group | Description | Example
 Flags allow you to provide additional customizations for spell effects, behavior, and limitations.
 Spells may have any number of flags, for example:
 
-```json
+```jsonc
   {
     "id": "bless",
     "//": "Encumbrance on the mouth (verbal) or arms (somatic) affect casting success, but not legs.",
@@ -269,7 +269,7 @@ Spells may have any number of flags, for example:
 ```
 
 Flag                       | Description
--------------------------  | ---
+---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 `CONCENTRATE`              | Focus affects spell fail %.
 `EXTRA_EFFECTS_FIRST`      | The spell's `extra_effects` will happen before the main spell effect.
 `FRIENDLY_POLY`            | The target of a `targeted_polymorph` spell will become friendly to the caster if the spell resolves successfully.
@@ -298,7 +298,7 @@ Flag                       | Description
 `RANDOM_CRITTER`           | Same as `RANDOM_TARGET` but ignores ground.
 `RANDOM_DAMAGE`            | Picks random number between (min + increment) * level and max instead of normal behavior.
 `RANDOM_DURATION`          | Picks random number between (min + increment) * level and max instead of normal behavior.
-`RANDOM_TARGET`            | Forces the spell to choose a random valid target within range instead of the caster choosing the target.  This also affects `extra_effects`. 
+`RANDOM_TARGET`            | Forces the spell to choose a random valid target within range instead of the caster choosing the target.  This also affects `extra_effects`.
 `RECHARM`                  | charm_monster spell stacks its duration onto existing charm effect.
 `SILENT`                   | Spell makes no noise at target.
 `SOMATIC`                  | Arm encumbrance affects fail % and casting time (slightly).
@@ -317,16 +317,16 @@ Flag                       | Description
 The following are the available damage types, for those spells that have a damaging component:
 
 Damage type  | Description
----          |---
-`acid`       | 
-`bash`       | 
+-------------|-----------------------------------------------------------------
+`acid`       |
+`bash`       |
 `biological` | Internal damage such as poison.
-`cold`       | 
-`cut`        | 
-`electric`   | 
-`heat`       | 
+`cold`       |
+`cut`        |
+`electric`   |
+`heat`       |
 `pure`       | This damage type goes through armor altogether.  Set by default.
-`stab`       | 
+`stab`       |
 
 
 ### Spell level
@@ -351,7 +351,7 @@ Additionally, there are also included:
 
 For example:
 
-```json
+```jsonc
 ...
     "min_range": 1,
     "max_range": 25,
@@ -361,7 +361,7 @@ For example:
 
 Min and max values must always have the same sign, but it can be negative e.g. in the case of spells that use a negative 'recover' effect to cause pain or stamina damage.  For example:
 
-```json
+```jsonc
   {
     "id": "stamina_damage",
     "type": "SPELL",
@@ -382,7 +382,7 @@ Min and max values must always have the same sign, but it can be negative e.g. i
 
 There multiple ways to learn spells: learning a spell from an item (through a `use_action`), from spells that have the `learn_spells` field, and from traits/mutations.  An example is shown below:
 
-```json
+```jsonc
   {
     "id": "DEBUG_spellbook",
     "type": "GENERIC",
@@ -403,7 +403,7 @@ There multiple ways to learn spells: learning a spell from an item (through a `u
 You can study this spellbook for a rate of ~1 experience per turn depending on intelligence, spellcraft, and focus.
 
 Below is an example of `learn_spells` usage:
-```json
+```jsonc
   {
     "id": "phase_door",
     "type": "SPELL",
@@ -435,7 +435,7 @@ Another two interesting fields are `extra_effects` and `effect_str`:
 
 You can add spells to professions or NPC class definitions like this:
 
-```json
+```jsonc
   {
     "id": "test_profession",
     "type": "profession",
@@ -630,7 +630,7 @@ Also, keep in mind that changing the spell experience requirements of an existin
 Note: the exp_for_level_formula_id requires the total experience required for a spell level, not the difference in experience between the current and next level.  IE, if a spell requires 1000 xp to level a level 10 spell should require 10,000 experience in its exp_for_level_formula_id, not 1,000.
 
 Constant Spell Exp Requirement Example:
-```json
+```jsonc
   {
     "id": "test_spell",
     "type": "SPELL",
@@ -696,26 +696,26 @@ Magic Type Example:
 
 Enchantments are another layer of enhancements, similar to `effect_type` and `mutation`.  Unlike these which are carried by the avatar and similar entities, enchantments are bound to "containers" such as items, mutations, bionics and effects.  This allows some flexibility in customizing effects and interactions according to the current state of the container, the spell being activated if any, what exactly is being granted, and more.
 
-Identifier                  | Description
----                         |---
-`id`                        | Unique ID.  Must be one continuous word, use underscores if necessary.
-`has`                       | How an enchantment determines if it is in the right location in order to qualify for being active.  `WIELD` when wielded in your hand, `WORN` when worn as armor, `HELD` when in your inventory.
-`condition`                 | Determines the environment where the enchantment is active.  `ALWAYS` is active always and forevermore, `ACTIVE` whenever the item, mutation, bionic, or whatever the enchantment is attached to is active, `INACTIVE` whenever the item, mutation, bionic, or whatever the enchantment is attached to is inactive.  `DIALOG_CONDITION - ACTIVE` whenever the dialog condition in `condition` is true.
-`hit_you_effect`            | A spell that activates when you `melee_attack` a creature.  The spell is centered on the location of the creature unless `"hit_self": true`, then it is centered on your location.  Follows the template for defining `fake_spell`.
-`hit_me_effect`             | A spell that activates when you are hit by a creature.  The spell is centered on your location.  Follows the template for defining `fake_spell`
-`intermittent_activation`   | Spells that activate centered on you depending on the duration.  The spells follow the `fake_spell` template.
-`values`                    | Numbers that can be modified (see [list](#id-values)).  `add` is added to the base value, `multiply` is **also added** and treated as percentage: 2.5 is +250% and -1 is -100%.  `add` is always applied before `multiply`.  Either `add` or `multiply` can be a variable_object/math expression (see [below](#variables) for syntax and application, and [NPCs](NPCs.md) for the in depth explanation).
-`skills`                    | A bonus or penalty to skills. Syntax is the same as for values, using the id of the skill name.
-`emitter`                   | Grants the emit_id.
-`modified_bodyparts`        | Modifies the body plan (standard is human).  `gain` adds body_part_id, `lose` removes body_part_id.  Note: changes done this way stay even after the item/effect/mutation carrying the enchantment is removed.
-`mutations`                 | Grants the mutation/trait ID.  Note: enchantments effects added this way won't stack, due how mutations work.
-`ench_effects`              | Grants the effect_id.  Requires the `intensity` for the effect.
+Identifier                | Description
+--------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+`id`                      | Unique ID.  Must be one continuous word, use underscores if necessary.
+`has`                     | How an enchantment determines if it is in the right location in order to qualify for being active.  `WIELD` when wielded in your hand, `WORN` when worn as armor, `HELD` when in your inventory.
+`condition`               | Determines the environment where the enchantment is active.  `ALWAYS` is active always and forevermore, `ACTIVE` whenever the item, mutation, bionic, or whatever the enchantment is attached to is active, `INACTIVE` whenever the item, mutation, bionic, or whatever the enchantment is attached to is inactive.  `DIALOG_CONDITION - ACTIVE` whenever the dialog condition in `condition` is true.
+`hit_you_effect`          | A spell that activates when you `melee_attack` a creature.  The spell is centered on the location of the creature unless `"hit_self": true`, then it is centered on your location.  Follows the template for defining `fake_spell`.
+`hit_me_effect`           | A spell that activates when you are hit by a creature.  The spell is centered on your location.  Follows the template for defining `fake_spell`
+`intermittent_activation` | Spells that activate centered on you depending on the duration.  The spells follow the `fake_spell` template.
+`values`                  | Numbers that can be modified (see [list](#id-values)).  `add` is added to the base value, `multiply` is **also added** and treated as percentage: 2.5 is +250% and -1 is -100%.  `add` is always applied before `multiply`.  Either `add` or `multiply` can be a variable_object/math expression (see [below](#variables) for syntax and application, and [NPCs](NPCs.md) for the in depth explanation).
+`skills`                  | A bonus or penalty to skills. Syntax is the same as for values, using the id of the skill name.
+`emitter`                 | Grants the emit_id.
+`modified_bodyparts`      | Modifies the body plan (standard is human).  `gain` adds body_part_id, `lose` removes body_part_id.  Note: changes done this way stay even after the item/effect/mutation carrying the enchantment is removed.
+`mutations`               | Grants the mutation/trait ID.  Note: enchantments effects added this way won't stack, due how mutations work.
+`ench_effects`            | Grants the effect_id.  Requires the `intensity` for the effect.
 
 All fields except for `type` and `id` are optional.  This includes the otherwise obligatory `name` and `description`.  If a name and description are set, they will be displayed in the EFFECTS tab.
 
 There are two possible syntaxes.  The first is by defining an enchantment object and then referencing the ID, the second is by directly defining the inline enchantment inside something (in this case, an item):
 
-```json
+```jsonc
   {
     "type": "enchantment",
     "id": "ENCH_INVISIBILITY",
@@ -819,7 +819,7 @@ There are two possible syntaxes.  The first is by defining an enchantment object
   }
 ```
 
-```json
+```jsonc
   {
     "copy-from": "mring_silver",
     "type": "TOOL_ARMOR",
@@ -837,7 +837,7 @@ As seen in the last example, enchantments are added to the item as `passive_effe
 
 Also supported is `charge_info`, which allows automatic charge regeneration.  This in turn enables active magical items that cast spells on use:
 
-```json
+```jsonc
 ...
     "use_action": { "type": "cast_spell", "spell_id": "conj_throwing_blade3", "no_fail": true, "level": 1, "need_worn": true },
     "extend": { "flags": [ "NO_UNLOAD", "NO_RELOAD" ] },
@@ -851,7 +851,7 @@ The item consumes 1 charge per spell cast.  It can't be recharged or unloaded, r
 
 Another example is a `GUN` type item (e.g. a firearm).  As this is a weapon that consumes ammo per use, `use_action` can be omitted:
 
-```json
+```jsonc
 ...
     "clip_size": 5,
     "flags": [ "NO_UNLOAD", "NO_RELOAD" ],
@@ -869,7 +869,7 @@ This weapon consumes "magic bullet" ammo every time it's fired.  Note how `charg
 The field `charge_info` supports the following:
 
 Identifier           | Description
----                  |---
+---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------
 `regenerate_ammo`    | `true`.
 `recharge_type`      | Can be one of: `lunar`, `periodic`, `solar_cloudy`, `solar_sunny`, or `none`.
 `time`               | Time required per charge.
@@ -880,7 +880,7 @@ Identifier           | Description
 
 From now, EOC variables can be used inside enchantments, including predefined (see [NPCs.md](NPCs.md#dialogue-conditions) for examples), custom variables or [math equasions](NPCs.md#math).  Here are some examples:
 
-```json
+```jsonc
   {
     "type": "enchantment",
     "id": "MON_NEARBY_STR",
@@ -893,7 +893,7 @@ From now, EOC variables can be used inside enchantments, including predefined (s
 This enchantment adds the dexterity value to strength plus one: a character with str 8 and dex 10 will result with str 19 and dex 10.
 
 
-```json
+```jsonc
   {
     "type": "enchantment",
     "id": "MON_NEARBY_LUMINATION",
@@ -911,7 +911,7 @@ This enchantment adds the dexterity value to strength plus one: a character with
 This enchantment checks the amount of monsters near the character (in a 25 tile range), then multiplies that number by 20, and adds the value as lumination: more monsters nearby = more light produced.
 
 
-```json
+```jsonc
   {
     "type": "enchantment",
     "id": "MOON_STR",
@@ -927,7 +927,7 @@ First, the custom variable IS_UNDER_THE_MOON is set behind the scenes, it checks
 
 `condition` field support any EoC condition
 
-```json
+```jsonc
   {
     "type": "enchantment",
     "id": "BITE_STR",
@@ -941,130 +941,130 @@ First, the custom variable IS_UNDER_THE_MOON is set behind the scenes, it checks
 
 The following is a list of possible enchantment `values`:
 
-Character status value  | Description
----                     |---
-`ARMOR_ALL`             | Gives this amount of protection against any damage type except one with "no_resist": true. For more precise changes use incoming_damage_mod or item_armor_bonus
-`ATTACK_NOISE`          | Affects the amount of noise you make while melee attacking.
-`ATTACK_SPEED`          | Affects attack speed of item, even if it's not the one you're wielding, and throwing cost (capped at 25 moves). `"add": 10` adds 10 moves to each attack (makes it longer), `"add": -10` makes each attack faster for 10 moves; `"multiply": 1` doubles the speed of each attack
-`AVOID_FRIENDRY_FIRE`   | Flat chance for your character to avoid friendry fire if there is a friend in the line of fire. From 0.0 (no chance) to 1.0 (never frindly fire).
-`BANDAGE_BONUS`         | Affects the `bandages_power` you have when applying medicine.
-`BIONIC_MANA_PENALTY`       | changes how big the mana penalty for having bionic energy is (default ratio is 1 kj removes 1 mana point). better to use with `multiply`, using `add` just adds or removes flat amount of mana no matter of energy level. `"multiply": 1` double the ratio (1 kj removes 2 mana points), `"multiply": -0.5` halves it
-`BIONIC_POWER`          | Adds bionic power storage in millijoules ("add": 1000000 adds 1 kJ)
-`BLEED_STOP_BONUS`      | Affects the `bleed` level when applying medicine.
-`BODYTEMP_SLEEP`        | Amount of warmth (in celcius) added to you when you sleep. Default is 0, so better to use `add`
-`BONUS_BLOCK`           | Affects the number of blocks you can perform.
-`BONUS_DODGE`           | Affects the number of dodges you can perform. Do not confuse with `DODGE_CHANCE`
-`CARDIO_MULTIPLIER`     | Affects total cardio fitness by this amount.  Since it's a percent, using `multiply` is recommended.
-`CARRY_WEIGHT`          | Affect the summary weight player can carry. `"add": 1000` adds 1 kg of weight to carry.
-`CASTING_TIME_MULTIPLIER`   | Same as mutation `casting_time_multiplier` field, changes your casting speed. Since it's a percent, using `multiply` is recommended. `"multiply": 2"` triples the casting speed 
-`COMBAT_CATCHUP`        | Affects the rate at which you relearn combat skills (multiplier).
-`CONSUME_TIME_MOD`      | Changes how long you consume `FOOD` and `DRINK` or something from `chems` itemgroup. `"add": 10` adds 10 seconds to food consumption, `multiply: 1` doubles it
-`CLIMATE_CONTROL_HEAT`  | Moves body temperature up towards comfortable by number of warmth units up to value.
-`CLIMATE_CONTROL_CHILL` | Moves body temperature down towards comfortable by number of warmth units up to value.
-`CRAFTING_SPEED_MULTIPLIER` | Changes your crafting speed. Since it's a percent, using `multiply` is recommended.  Positive values decrease crafting time, negative values increase it.
-`DEXTERITY`             | Affects the dexterity stat.
-`DISINFECTANT_BONUS`    | Affects the `disinfectant_power` you have when applying medicine.
-`DODGE_CHANCE`          | Modifies the probability to dodge an attack. Default is 0, so better to use `add`
-`EFFECTIVE_HEALTH_MOD`  | If this is anything other than zero (which it defaults to) you will use it instead of your actual health mod.
-`EQUIPMENT_DAMAGE_CHANCE` | Modifies the likelihood that weapons and armor take durability damage.  Since it's a percent, using 'multiply' is recommended.  Positive values increase likelihood of damage while negative values decrease likelihood.  `multiply`: -1 and below result in indestructible equipment.
-`EXTRA_ELEC_PAIN`       | Multiplier on electric damage received, the result is applied as extra pain.
-`EVASION`               | Flat chance for your character to dodge incoming attacks regardless of other modifiers.  From 0.0 (no evasion chance) to 1.0 (100% evasion chance).
-`FALL_DAMAGE`           | Affects the amount of fall damage you take.
-`SLEEPINESS`               | Affects how fast your sleepiness grows over time - bigger value makes you tired faster. Since it's a percent, using `multiply` is recommended.
-`SLEEPINESS_REGEN`         | Affects how much of your sleepiness and sleep deprivation drops when resting. Since it's a percent, using `multiply` is recommended.
-`FAT_TO_MAX_HP`         | Changes the amount of HP, that is given to you by your fat. Formula is `((your_calories/7716.17)/((your_height_in_cm/100)^2))*hitsize_of_all_non_bionic_bodyparts`. Using `add` works just as adding HP, so use `multiply` instead
-`FOOTSTEP_NOISE`        | 
-`FORCEFIELD`            | Chance your character reduces incoming damage to 0. From 0.0 (no chance), to 1.0 (100% chance to avoid attacks).
-`HEALTHY_RATE`          | How much of your health is changed daily. `"multiply": -1` stops any changes in health
-`HEARING_MULT`          | How well you can hear. Remember that increased hearing means you would have a bigger "noise" written in UI; default step noise of 6, multiplied 10 times, would show it as 60
-`HUNGER`                | Affects how fast your hunger level changes. Do not affect actual calorie burn, the `METABOLISM` field is responsible for this
-`INTELLIGENCE`          | Affects the intelligence stat.
-`KCAL`                  | Same as bio_digestion effect, increases the amount of calories obtained the food.
-`KNOCKBACK_RESIST`      | The amount knockback effects you, 0 is the regular amount, -100 would be double effect, 100 would be no effect.
-`KNOCKDOWN_RESIST`      | The amount knockdown effects you, currently *only* having 100 or greater knockdown_resist makes you immune to knockdown.
-`LEARNING_FOCUS`        | Amount of bonus focus you have for learning purposes.
-`LUMINATION`            | Character produces light.
-`MAX_HP`                | 
-`MAX_MANA`              | 
-`MAX_STAMINA`           | 
-`MELEE_DAMAGE`          | Adds damage to melee attacks
-`MELEE_RANGE_MODIFIER`  | Modifies the range of melee attacks, with positive values acting similarly to reach attacks.  Will never reduce melee range below 1.
-`MELEE_TO_HIT`          | Modifies melee attacks' `to_hit`. `add` is recommended since `to_hit` can be below 0 and has a small typical range.
-`MELEE_STAMINA_CONSUMPTION` | Changes amount of stamina used when swing in melee; stamina consumption is a negative value, so `"add": 100` decreases amount of stamina consumed, when `"add": -100` increases it; `"multiply": 1` increases, `"multiply": -0.5` decreases it. Can't be bigger than -50.
-`MENDING_MODIFIER`      | Changes the speed of your limb mend. Since it's a percent, using `multiply` is recommended.
-`METABOLISM`            | Multiplier for `metabolic_rate_base`, which respond for default bmi rate; Formula for basic bmi is `metabolic_rate_base * ( (weight_in_kg / 10 ) + (6.25 * height) - (5 * age) + 5 )`; Since it's a percent, using `multiply` is recommended; Since metabolism is directly connected to weariness, at this moment decreasing it makes you more weary the less metabolism you have; zero metabolism (`multiply: -1`) is handled separately, and makes you never weary.
-`MOD_HEALTH`            | If this is anything other than zero (which it defaults to) you will to mod your health to a max/min of `MOD_HEALTH_CAP` every half hour.
-`MOD_HEALTH_CAP`        | If this is anything other than zero (which it defaults to) you will cap your `MOD_HEALTH` gain/loss at this every half hour.
-`MOTION_ALARM`          | Add alarm, when something moving around player it will activated
-`MOVE_COST`             | 
-`MUT_INSTABILITY_MOD`   | Modifies your instability score, which affects the chance to get bad mutation (scales with amount of good mutations you have, capping at 67%, check `Character::roll_bad_mutation` for more information). `add: 1` would be equal to having 1 good mutation more, increasing the chance to get bad mutation, `add: -1` would be like you have one good mutation less, decreasing the chance to get bad mutation.
-`MUT_ADDITIONAL_OPTIONS`| Whenever the character mutates, they may pick from the initially rolled mutation and x additional options given by the mutation value.  These options will be clustered around the initially picked mutation based on their relative point values.  IE, if a character initially rolls a negative mutation, the additional options will likely also be negative mutations.  High enough enchantment values will allow picking from every possible mutation.
-`MOVECOST_FLATGROUND_MOD`| How many moves you spend to move 1 tile on flat ground; shown in UI
-`MOVECOST_OBSTACLE_MOD` | How many moves you spend to move 1 tile, if this tile has a movecost more than 105 moves; not shown in UI
-`MOVECOST_SWIM_MOD`     | How many moves you spend to move 1 tile in water; not shown in UI
+Character status value       | Description
+-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+`ARMOR_ALL`                  | Gives this amount of protection against any damage type except one with "no_resist": true. For more precise changes use incoming_damage_mod or item_armor_bonus
+`ATTACK_NOISE`               | Affects the amount of noise you make while melee attacking.
+`ATTACK_SPEED`               | Affects attack speed of item, even if it's not the one you're wielding, and throwing cost (capped at 25 moves). `"add": 10` adds 10 moves to each attack (makes it longer), `"add": -10` makes each attack faster for 10 moves; `"multiply": 1` doubles the speed of each attack
+`AVOID_FRIENDRY_FIRE`        | Flat chance for your character to avoid friendry fire if there is a friend in the line of fire. From 0.0 (no chance) to 1.0 (never frindly fire).
+`BANDAGE_BONUS`              | Affects the `bandages_power` you have when applying medicine.
+`BIONIC_MANA_PENALTY`        | changes how big the mana penalty for having bionic energy is (default ratio is 1 kj removes 1 mana point). better to use with `multiply`, using `add` just adds or removes flat amount of mana no matter of energy level. `"multiply": 1` double the ratio (1 kj removes 2 mana points), `"multiply": -0.5` halves it
+`BIONIC_POWER`               | Adds bionic power storage in millijoules ("add": 1000000 adds 1 kJ)
+`BLEED_STOP_BONUS`           | Affects the `bleed` level when applying medicine.
+`BODYTEMP_SLEEP`             | Amount of warmth (in celcius) added to you when you sleep. Default is 0, so better to use `add`
+`BONUS_BLOCK`                | Affects the number of blocks you can perform.
+`BONUS_DODGE`                | Affects the number of dodges you can perform. Do not confuse with `DODGE_CHANCE`
+`CARDIO_MULTIPLIER`          | Affects total cardio fitness by this amount.  Since it's a percent, using `multiply` is recommended.
+`CARRY_WEIGHT`               | Affect the summary weight player can carry. `"add": 1000` adds 1 kg of weight to carry.
+`CASTING_TIME_MULTIPLIER`    | Same as mutation `casting_time_multiplier` field, changes your casting speed. Since it's a percent, using `multiply` is recommended. `"multiply": 2"` triples the casting speed
+`COMBAT_CATCHUP`             | Affects the rate at which you relearn combat skills (multiplier).
+`CONSUME_TIME_MOD`           | Changes how long you consume `FOOD` and `DRINK` or something from `chems` itemgroup. `"add": 10` adds 10 seconds to food consumption, `multiply: 1` doubles it
+`CLIMATE_CONTROL_HEAT`       | Moves body temperature up towards comfortable by number of warmth units up to value.
+`CLIMATE_CONTROL_CHILL`      | Moves body temperature down towards comfortable by number of warmth units up to value.
+`CRAFTING_SPEED_MULTIPLIER`  | Changes your crafting speed. Since it's a percent, using `multiply` is recommended.  Positive values decrease crafting time, negative values increase it.
+`DEXTERITY`                  | Affects the dexterity stat.
+`DISINFECTANT_BONUS`         | Affects the `disinfectant_power` you have when applying medicine.
+`DODGE_CHANCE`               | Modifies the probability to dodge an attack. Default is 0, so better to use `add`
+`EFFECTIVE_HEALTH_MOD`       | If this is anything other than zero (which it defaults to) you will use it instead of your actual health mod.
+`EQUIPMENT_DAMAGE_CHANCE`    | Modifies the likelihood that weapons and armor take durability damage.  Since it's a percent, using 'multiply' is recommended.  Positive values increase likelihood of damage while negative values decrease likelihood.  `multiply`: -1 and below result in indestructible equipment.
+`EXTRA_ELEC_PAIN`            | Multiplier on electric damage received, the result is applied as extra pain.
+`EVASION`                    | Flat chance for your character to dodge incoming attacks regardless of other modifiers.  From 0.0 (no evasion chance) to 1.0 (100% evasion chance).
+`FALL_DAMAGE`                | Affects the amount of fall damage you take.
+`SLEEPINESS`                 | Affects how fast your sleepiness grows over time - bigger value makes you tired faster. Since it's a percent, using `multiply` is recommended.
+`SLEEPINESS_REGEN`           | Affects how much of your sleepiness and sleep deprivation drops when resting. Since it's a percent, using `multiply` is recommended.
+`FAT_TO_MAX_HP`              | Changes the amount of HP, that is given to you by your fat. Formula is `((your_calories/7716.17)/((your_height_in_cm/100)^2))*hitsize_of_all_non_bionic_bodyparts`. Using `add` works just as adding HP, so use `multiply` instead
+`FOOTSTEP_NOISE`             |
+`FORCEFIELD`                 | Chance your character reduces incoming damage to 0. From 0.0 (no chance), to 1.0 (100% chance to avoid attacks).
+`HEALTHY_RATE`               | How much of your health is changed daily. `"multiply": -1` stops any changes in health
+`HEARING_MULT`               | How well you can hear. Remember that increased hearing means you would have a bigger "noise" written in UI; default step noise of 6, multiplied 10 times, would show it as 60
+`HUNGER`                     | Affects how fast your hunger level changes. Do not affect actual calorie burn, the `METABOLISM` field is responsible for this
+`INTELLIGENCE`               | Affects the intelligence stat.
+`KCAL`                       | Same as bio_digestion effect, increases the amount of calories obtained the food.
+`KNOCKBACK_RESIST`           | The amount knockback effects you, 0 is the regular amount, -100 would be double effect, 100 would be no effect.
+`KNOCKDOWN_RESIST`           | The amount knockdown effects you, currently *only* having 100 or greater knockdown_resist makes you immune to knockdown.
+`LEARNING_FOCUS`             | Amount of bonus focus you have for learning purposes.
+`LUMINATION`                 | Character produces light.
+`MAX_HP`                     |
+`MAX_MANA`                   |
+`MAX_STAMINA`                |
+`MELEE_DAMAGE`               | Adds damage to melee attacks
+`MELEE_RANGE_MODIFIER`       | Modifies the range of melee attacks, with positive values acting similarly to reach attacks.  Will never reduce melee range below 1.
+`MELEE_TO_HIT`               | Modifies melee attacks' `to_hit`. `add` is recommended since `to_hit` can be below 0 and has a small typical range.
+`MELEE_STAMINA_CONSUMPTION`  | Changes amount of stamina used when swing in melee; stamina consumption is a negative value, so `"add": 100` decreases amount of stamina consumed, when `"add": -100` increases it; `"multiply": 1` increases, `"multiply": -0.5` decreases it. Can't be bigger than -50.
+`MENDING_MODIFIER`           | Changes the speed of your limb mend. Since it's a percent, using `multiply` is recommended.
+`METABOLISM`                 | Multiplier for `metabolic_rate_base`, which respond for default bmi rate; Formula for basic bmi is `metabolic_rate_base * ( (weight_in_kg / 10 ) + (6.25 * height) - (5 * age) + 5 )`; Since it's a percent, using `multiply` is recommended; Since metabolism is directly connected to weariness, at this moment decreasing it makes you more weary the less metabolism you have; zero metabolism (`multiply: -1`) is handled separately, and makes you never weary.
+`MOD_HEALTH`                 | If this is anything other than zero (which it defaults to) you will to mod your health to a max/min of `MOD_HEALTH_CAP` every half hour.
+`MOD_HEALTH_CAP`             | If this is anything other than zero (which it defaults to) you will cap your `MOD_HEALTH` gain/loss at this every half hour.
+`MOTION_ALARM`               | Add alarm, when something moving around player it will activated
+`MOVE_COST`                  |
+`MUT_INSTABILITY_MOD`        | Modifies your instability score, which affects the chance to get bad mutation (scales with amount of good mutations you have, capping at 67%, check `Character::roll_bad_mutation` for more information). `add: 1` would be equal to having 1 good mutation more, increasing the chance to get bad mutation, `add: -1` would be like you have one good mutation less, decreasing the chance to get bad mutation.
+`MUT_ADDITIONAL_OPTIONS`     | Whenever the character mutates, they may pick from the initially rolled mutation and x additional options given by the mutation value.  These options will be clustered around the initially picked mutation based on their relative point values.  IE, if a character initially rolls a negative mutation, the additional options will likely also be negative mutations.  High enough enchantment values will allow picking from every possible mutation.
+`MOVECOST_FLATGROUND_MOD`    | How many moves you spend to move 1 tile on flat ground; shown in UI
+`MOVECOST_OBSTACLE_MOD`      | How many moves you spend to move 1 tile, if this tile has a movecost more than 105 moves; not shown in UI
+`MOVECOST_SWIM_MOD`          | How many moves you spend to move 1 tile in water; not shown in UI
 `MOVEMENT_EXERTION_MODIFIER` | Affects how much physical exertion (activity_level) is required for the player to move a single tile. The value this affects is technically a float, so addition and multiplication operations can be performed on it, but player-facing effects only happen at specific whole-integer breakpoints. This can most easily be seen in `\data\json\ui\activity.json`.
-`NIGHT_VIS`             | How well you can see in darkness.  `ADD` adds tiles, so `"ADD": 3` increases night vision distance by 3 tiles.
-`OBTAIN_COST_MULTIPLIER`| Modifier for pulling an item from a container, as a handling penalty or bonus. `"add": 100` add 100 additional moves to item wield (1 second)
-`OVERKILL_DAMAGE`       | multiplies or contributes to the damage to an enemy corpse after death. The lower the number, the more damage caused.
-`OVERMAP_SIGHT`         | Increases the amount of overmap tiles you can see around.
-`PAIN`                  | When gaining pain the amount gained will be modified by this much.  You will still always gain at least 1 pain.
-`PAIN_PENALTY_MOD_STR`  | Amount of this stat you lose from pain. Default value is `(pain*0.005)*max_str`. Can't be lower than 1
-`PAIN_PENALTY_MOD_DEX`  | Amount of this stat you lose from pain. Default value is `(pain*0.0075)*max_dex`. Can't be lower than 1
-`PAIN_PENALTY_MOD_INT`  | Amount of this stat you lose from pain. Default value is `(pain*0.01)*max_int`. Can't be lower than 1
-`PAIN_PENALTY_MOD_PER`  | Amount of this stat you lose from pain. Default value is `(pain*0.01)*max_per`. Can't be lower than 1
-`PAIN_PENALTY_MOD_SPEED`| Amount of speed you lose from pain. Default value is `pain^0.7`. Can't be bigger than 50 speed.
-`PAIN_REMOVE`           | When pain naturally decreases every five minutes the chance of pain removal will be modified by this much.  You will still always have at least a chance to reduce pain.
-`PERCEPTION`            | Affects the perception stat.
-`PHASE_DISTANCE`        | Distance the character is able to teleport through impassible terrain.  Values less than 1 do nothing and the max distance is 48 tiles.
-`POWER_TRICKLE`         | Generates this amount of millijoules each second. Default value is zero, so better to use `add`
-`RANGE`                 | Modifies your characters range with firearms
-`RANGED_ARMOR_PENETRATION` | Adds armor penetration to ranged attacks.
-`RANGED_DAMAGE`         | Adds damage to ranged attacks.
-`RANGE_DODGE`           | Chance to dodge projectile attack, no matter of it's speed; Consumes dodges similarly to melee dodges, and fails, if character has no dodges left. `add` and `multiply` behave equally. `add: 0.5` would result in 50% chance to avoid projectile
-`READING_EXP`           | Changes the minimum you learn from each reading increment.
-`READING_SPEED_MULTIPLIER`  | Changes how fast you can read books; Lesser value means faster book reading, with cap of 1 second.
-`RECOIL_MODIFIER`       | Affects recoil when shooting a gun.  Positive value increase the dispersion, negative decrease one.
-`REGEN_HP`              | Affects the rate you recover hp, at all time, both natural and using medicine. Default 1; Negative value (so `multiply: -1.1` or smaller) would cause character lose it's HP all the time 
-`REGEN_HP_AWAKE`        | Affects the rate you recover hp when you do not sleep. Default value is 0, meaning if this enchantment is not specified, character can not regenerate hp when awake. Negative value causes character to lost HP over time when awake. Since it's a percent, using `multiply` is recommended; `multiply: 0.2` would make character able to regenerate at 20% of it's default regen
-`REGEN_MANA`            | 
-`REGEN_STAMINA`         | 
-`SCENT_MASK`            | Amount added to your scent target scent value (default 500, assigned by `scent_intensity` mutation field); `"add": 100` makes character a bit more smelly
-`SHOUT_NOISE`           | Changes how loud your shouts are (default 10)
-`SHOUT_NOISE_STR_MULT`  | Modifies the `shout_multiplier`, that affect how much your strength affects noise level (default 2, meaning one point of strength adds 2 units of noise )
-`SKILL_RUST_RESIST`     | when `add`, chance / 100 to resist skill rust; when `multiply`, multiplier for skill rust amount - the smaller, the less experience you will rust
-`SLEEPY`                | The higher this the easier you fall asleep.
-`SOCIAL_INTIMIDATE`     | Affects your ability to intimidate.
-`SOCIAL_LIE`            | Affects your ability to lie.
-`SOCIAL_PERSUADE`       | Affects your ability to persuade.
-`SPEED`                 | Affects your base speed.
-`STAMINA_REGEN_MOD`     | Modifier to how fast you regen your stamina. It is a percent with default value of 0, so `multiply` is useful only in combination with `add`. `add: 0.1` makes regen 10% bigger, `add: 1` doubles it
-`STEALTH_MODIFIER`      | Amount to be subtracted from player's visibility range, capped to 60.  Negative values work, but are not very effective due to the way vision ranges are capped.
-`STOMACH_SIZE_MULTIPLIER`   | Changes how much food you can consume at once. `"add": 1000` adds 1 L to stomach size
-`STRENGTH`              | Affects the strength stat. Formula for all stat affecting enchantments are `(base_stat + enchantment_addition) * (enchantment_multiplier + 1)`. Str 8 with enchantment `add 2, multiply 1` result in `(8+2) * (1+1) = 10 * 2 =` 20 str
-`SWEAT_MULTIPLIER`      | Affects how much your body can sweat. Affects all bodyparts at once. Since it's a percent, using `multiply` is recommended.
-`THIRST`                | 
-`THROW_STR`             | Increases your strength for throwing purposes. Not limited by your throwing skill (you still throw it as precise as your skill allows you, just further). Only additive. Rule of thumb: one additional point of strength allow you to throw 113 g object 10 tiles further, or 1130 g object 1 tile further, limited by [ str * 3 + skill ]. Full calculations are in Character::throw_range
-`THROW_DAMAGE`          | Increases the damage of any thrown projectile. `add` adds this amount of damage to the projectile as bash damage, `multiply` would increase all projectile damage, not only bash type.
-`UGLINESS`              | Affects your `ugliness` stat, which affects NPCs' initial opinion of you.
-`VITAMIN_ABSORB_MOD`    | Increases amount of vitamins obtained from the food
-`VOMIT_MUL`             | Affects your chances to vomit.
-`WEAKNESS_TO_WATER`     | Amount of damage character gets when wet, once per second; scales with wetness, being 50% wet deal only half of damage; negative values restore hp; flat number with default value of 0, so `multiply` is useful only in combination with `add`; Works with float numbers, so `"add": -0.3` would result in restoring 1 hp with 30% change, and 70% chance to do nothing
-`WEAKPOINT_ACCURACY`    | Increases the coverage of every weakpoint you hit, therefore, increasing chances to hit said weakpoint. Works only if weakpoint has `"is_good": true` (all weakpoints have it true by default)
-`WEAPON_DISPERSION`     | Positive value increase the dispersion, negative decrease one.
+`NIGHT_VIS`                  | How well you can see in darkness.  `ADD` adds tiles, so `"ADD": 3` increases night vision distance by 3 tiles.
+`OBTAIN_COST_MULTIPLIER`     | Modifier for pulling an item from a container, as a handling penalty or bonus. `"add": 100` add 100 additional moves to item wield (1 second)
+`OVERKILL_DAMAGE`            | multiplies or contributes to the damage to an enemy corpse after death. The lower the number, the more damage caused.
+`OVERMAP_SIGHT`              | Increases the amount of overmap tiles you can see around.
+`PAIN`                       | When gaining pain the amount gained will be modified by this much.  You will still always gain at least 1 pain.
+`PAIN_PENALTY_MOD_STR`       | Amount of this stat you lose from pain. Default value is `(pain*0.005)*max_str`. Can't be lower than 1
+`PAIN_PENALTY_MOD_DEX`       | Amount of this stat you lose from pain. Default value is `(pain*0.0075)*max_dex`. Can't be lower than 1
+`PAIN_PENALTY_MOD_INT`       | Amount of this stat you lose from pain. Default value is `(pain*0.01)*max_int`. Can't be lower than 1
+`PAIN_PENALTY_MOD_PER`       | Amount of this stat you lose from pain. Default value is `(pain*0.01)*max_per`. Can't be lower than 1
+`PAIN_PENALTY_MOD_SPEED`     | Amount of speed you lose from pain. Default value is `pain^0.7`. Can't be bigger than 50 speed.
+`PAIN_REMOVE`                | When pain naturally decreases every five minutes the chance of pain removal will be modified by this much.  You will still always have at least a chance to reduce pain.
+`PERCEPTION`                 | Affects the perception stat.
+`PHASE_DISTANCE`             | Distance the character is able to teleport through impassible terrain.  Values less than 1 do nothing and the max distance is 48 tiles.
+`POWER_TRICKLE`              | Generates this amount of millijoules each second. Default value is zero, so better to use `add`
+`RANGE`                      | Modifies your characters range with firearms
+`RANGED_ARMOR_PENETRATION`   | Adds armor penetration to ranged attacks.
+`RANGED_DAMAGE`              | Adds damage to ranged attacks.
+`RANGE_DODGE`                | Chance to dodge projectile attack, no matter of it's speed; Consumes dodges similarly to melee dodges, and fails, if character has no dodges left. `add` and `multiply` behave equally. `add: 0.5` would result in 50% chance to avoid projectile
+`READING_EXP`                | Changes the minimum you learn from each reading increment.
+`READING_SPEED_MULTIPLIER`   | Changes how fast you can read books; Lesser value means faster book reading, with cap of 1 second.
+`RECOIL_MODIFIER`            | Affects recoil when shooting a gun.  Positive value increase the dispersion, negative decrease one.
+`REGEN_HP`                   | Affects the rate you recover hp, at all time, both natural and using medicine. Default 1; Negative value (so `multiply: -1.1` or smaller) would cause character lose it's HP all the time
+`REGEN_HP_AWAKE`             | Affects the rate you recover hp when you do not sleep. Default value is 0, meaning if this enchantment is not specified, character can not regenerate hp when awake. Negative value causes character to lost HP over time when awake. Since it's a percent, using `multiply` is recommended; `multiply: 0.2` would make character able to regenerate at 20% of it's default regen
+`REGEN_MANA`                 |
+`REGEN_STAMINA`              |
+`SCENT_MASK`                 | Amount added to your scent target scent value (default 500, assigned by `scent_intensity` mutation field); `"add": 100` makes character a bit more smelly
+`SHOUT_NOISE`                | Changes how loud your shouts are (default 10)
+`SHOUT_NOISE_STR_MULT`       | Modifies the `shout_multiplier`, that affect how much your strength affects noise level (default 2, meaning one point of strength adds 2 units of noise )
+`SKILL_RUST_RESIST`          | when `add`, chance / 100 to resist skill rust; when `multiply`, multiplier for skill rust amount - the smaller, the less experience you will rust
+`SLEEPY`                     | The higher this the easier you fall asleep.
+`SOCIAL_INTIMIDATE`          | Affects your ability to intimidate.
+`SOCIAL_LIE`                 | Affects your ability to lie.
+`SOCIAL_PERSUADE`            | Affects your ability to persuade.
+`SPEED`                      | Affects your base speed.
+`STAMINA_REGEN_MOD`          | Modifier to how fast you regen your stamina. It is a percent with default value of 0, so `multiply` is useful only in combination with `add`. `add: 0.1` makes regen 10% bigger, `add: 1` doubles it
+`STEALTH_MODIFIER`           | Amount to be subtracted from player's visibility range, capped to 60.  Negative values work, but are not very effective due to the way vision ranges are capped.
+`STOMACH_SIZE_MULTIPLIER`    | Changes how much food you can consume at once. `"add": 1000` adds 1 L to stomach size
+`STRENGTH`                   | Affects the strength stat. Formula for all stat affecting enchantments are `(base_stat + enchantment_addition) * (enchantment_multiplier + 1)`. Str 8 with enchantment `add 2, multiply 1` result in `(8+2) * (1+1) = 10 * 2 =` 20 str
+`SWEAT_MULTIPLIER`           | Affects how much your body can sweat. Affects all bodyparts at once. Since it's a percent, using `multiply` is recommended.
+`THIRST`                     |
+`THROW_STR`                  | Increases your strength for throwing purposes. Not limited by your throwing skill (you still throw it as precise as your skill allows you, just further). Only additive. Rule of thumb: one additional point of strength allow you to throw 113 g object 10 tiles further, or 1130 g object 1 tile further, limited by [ str * 3 + skill ]. Full calculations are in Character::throw_range
+`THROW_DAMAGE`               | Increases the damage of any thrown projectile. `add` adds this amount of damage to the projectile as bash damage, `multiply` would increase all projectile damage, not only bash type.
+`UGLINESS`                   | Affects your `ugliness` stat, which affects NPCs' initial opinion of you.
+`VITAMIN_ABSORB_MOD`         | Increases amount of vitamins obtained from the food
+`VOMIT_MUL`                  | Affects your chances to vomit.
+`WEAKNESS_TO_WATER`          | Amount of damage character gets when wet, once per second; scales with wetness, being 50% wet deal only half of damage; negative values restore hp; flat number with default value of 0, so `multiply` is useful only in combination with `add`; Works with float numbers, so `"add": -0.3` would result in restoring 1 hp with 30% change, and 70% chance to do nothing
+`WEAKPOINT_ACCURACY`         | Increases the coverage of every weakpoint you hit, therefore, increasing chances to hit said weakpoint. Works only if weakpoint has `"is_good": true` (all weakpoints have it true by default)
+`WEAPON_DISPERSION`          | Positive value increase the dispersion, negative decrease one.
 
 Enchanted item value | Description
----                  |---
-`ITEM_ATTACK_SPEED`  | 
+---------------------|------------
+`ITEM_ATTACK_SPEED`  |
 
 ### Enchantments on monsters
 A small subset of enchantments can be applied to monsters via effects. These are listed below:
 
-Character status value  | Description
----                     |---
-`REGEN_HP`              | Affects the rate the monster recovers hp.
-`VISION_RANGE`          | Affects monster vision range, both day and night one.
-`SPEED`                 | Affects the base speed of the monster.
-`LUMINATION`            | Affects monster luminance
+Character status value | Description
+-----------------------|------------------------------------------------------
+`REGEN_HP`             | Affects the rate the monster recovers hp.
+`VISION_RANGE`         | Affects monster vision range, both day and night one.
+`SPEED`                | Affects the base speed of the monster.
+`LUMINATION`           | Affects monster luminance
 
 ### Enchantment value examples
 
